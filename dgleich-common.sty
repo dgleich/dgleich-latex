@@ -1,0 +1,205 @@
+%%
+%% dgleich-common.sty
+%% Copyright, David Gleich, 2010
+%%
+%% based on tufte-latex and ClassicThesis
+%%
+
+% License:
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; see the file COPYING.  If not, write to
+% the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+% Boston, MA 02111-1307, USA.
+
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+
+\ProvidesClass{dgleich-common}[2010/08/03 v0.0.1 dgleich-common class]
+
+
+%%
+% We use the `xifthen' package to handle our package option switches
+\RequirePackage{xifthen}
+
+% Non-fussy packages
+\RequirePackage{multicol}
+\RequirePackage{xspace}
+\RequirePackage{microtype}
+\RequirePackage{paralist}
+\RequirePackage{listings}
+\RequirePackage{chngpage}
+\RequirePackage{titlesec}
+\RequirePackage{textcase}
+\RequirePackage{graphicx}
+\RequirePackage{geometry}
+\RequirePackage{tabularx}
+\RequirePackage{ragged2e}
+\RequirePackage{setspace}
+%\RequirePackage{helvet}
+
+
+\newboolean{@dgleich@longtitle}
+\DeclareOption{longtitle}{\setboolean{@dgleich@longtitle}{true}}
+\DeclareOption{shorttitle}{\setboolean{@dgleich@longtitle}{false}}
+
+\newboolean{@dgleich@sidenotes}
+\setboolean{@dgleich@sidenotes}{true}
+\DeclareOption{sidenotes}{\setboolean{@dgleich@sidenotes}{true}}
+\DeclareOption{nosidenotes}{\setboolean{@dgleich@sidenotes}{false}}
+
+\newboolean{@dgleich@fancyfonts}
+\setboolean{@dgleich@fancyfonts}{true}
+\DeclareOption{fancyfonts}{\setboolean{@dgleich@fancyfonts}{true}}
+\DeclareOption{nofancyfonts}{\setboolean{@dgleich@fancyfonts}{false}}
+
+\ProcessOptions
+
+
+% Setup page geometry
+\geometry{letterpaper,textwidth=350pt,textheight=680pt,tmargin=60pt,
+            left=72pt,footskip=24pt,headsep=18pt,headheight=14pt}
+\ifthenelse{\boolean{@dgleich@sidenotes}}{%
+  \geometry{marginparwidth=140pt,left=50pt,marginparsep=18pt}%
+  \RequirePackage{tufte-sidenotes}%
+}{%no else
+  
+}
+
+% Setup fancy fonts
+\ifthenelse{\boolean{@dgleich@fancyfonts}}{%
+  \RequirePackage[T1]{fontenc}%
+  \RequirePackage[latin1]{inputenc}%
+  \RequirePackage[minionint,openg,mathlf,mathtabular]{MinionPro}%
+  \RequirePackage[scaled=0.8]{helvet}%
+}{}
+
+%\theoremheaderfont{\normalfont\sffamily}
+%\usepackage{dgleich}
+
+
+\renewcommand{\abstractname}{}
+
+% Setup CAMPTIONS
+\RequirePackage{caption}
+\captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,sc,scriptsize}}
+%\usepackage{amssymb}
+\RequirePackage{xkeyval,tkz-graph,varwidth}
+  \usetikzlibrary{arrows,shapes}
+	\newcommand{\BlankVertexStyle}{%
+		\tikzstyle{NormalVertexStyle}=[minimum size=8pt,shape=circle]%
+	}
+	
+
+\renewcommand{\figurename}{FIGURE}
+\renewcommand{\tablename}{TABLE}
+
+\colorlet{TufteRed}{red!80!black}
+
+\newlength{\@suthesis@fullwidth}%
+    \setlength{\@suthesis@fullwidth}{\textwidth}%
+    \addtolength{\@suthesis@fullwidth}{\marginparsep}%
+    \addtolength{\@suthesis@fullwidth}{\marginparwidth}%
+    \newlength{\@suthesis@overhang}%
+    \setlength{\@suthesis@overhang}{\marginparwidth}%
+    \addtolength{\@suthesis@overhang}{\marginparsep}%
+
+%\renewenvironment{fullwidth}
+    %{\begin{adjustwidth}[]{}{-\@suthesis@overhang}}
+    %{\end{adjustwidth}}
+\newenvironment{fullwidth}{\begin{adjustwidth}{}{-\@suthesis@overhang}}%
+    {\end{adjustwidth}}
+
+
+
+\RequirePackage{soul}%
+\sodef\allcapsspacing{\upshape}{0.15em}{0.65em}{0.6em}%
+\sodef\smallcapsspacing{\scshape}{0.075em}{0.5em}{0.6em}%
+\newcommand{\smallcaps}{\scshape\smallcapsspacing}
+
+
+\newcommand{\sectionformat}[1]{\centering{\large\MakeTextLowercase{\smallcaps{#1}}}}
+\newcommand{\subsectionformat}[1]{\MakeTextUppercase{\smallcapsspacing{#1}}}
+  
+\titleformat{\section}% the `%` must be RIGHT against the }
+  [block]% shape
+  {\color{TufteRed}} % format applied to label+text
+  {\scshape\MakeTextLowercase{\thesection}}% label
+  {1em}% horizontal separation between label and title body
+  {\sectionformat}% before the title body
+  []% after the title body
+\titleformat{\subsection}% the `%` must be RIGHT against the }
+  [block]% shape
+  {\sffamily\scriptsize} % format applied to label+text
+  {\MakeTextUppercase{\thesubsection}}% label
+  {1ex}% horizontal separation between label and title body
+  {\subsectionformat}% before the title body
+  []% after the title body
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{0ex plus.2ex}%
+\titleformat{\paragraph}% the `%` must be RIGHT against the }
+  [runin]% shape
+  {\sffamily\scriptsize} % format applied to label+text
+  {\MakeTextUppercase{\thesubsection}}% label
+  {1ex}% horizontal separation between label and title body
+  {\subsectionformat}% before the title body
+  []% after the title body
+\titlespacing*{\paragraph}{0pt}{1\baselineskip}{1\baselineskip}  
+
+
+\ifthenelse{\boolean{@dgleich@longtitle}}{%
+\renewcommand{\maketitle}{%
+\hrule%
+\noindent%
+\parbox{0.75\textwidth}{%
+\begin{flushleft}%
+{%\color{TufteRed}%
+{\large\textsc{\MakeTextLowercase{\smallcapsspacing{\@title}}}}%
+}%
+\end{flushleft}%
+}%
+\par\noindent%
+\hfill%
+\parbox{0.75\textwidth}{%
+\begin{flushright}\small%
+ \itshape\@author\\[1ex]{\@date}%
+\end{flushright}%
+}%
+\hrule%
+\vspace{1ex}%
+}
+}{% provide the short title
+%\makeatletter
+\renewcommand{\maketitle}{%
+\hrule%
+\noindent%
+\parbox{0.4\textwidth}{%
+\begin{flushleft}%
+{%\color{TufteRed}%
+{\large\textsc{\MakeTextLowercase{\smallcapsspacing{\@title}}}}%
+}%
+\end{flushleft}%
+}%
+\hspace{0.2\textwidth}%
+\parbox{0.4\textwidth}{%
+\begin{flushright}\small%
+ \itshape\@author\\[1ex]{\@date}%
+\end{flushright}%
+}%
+\hrule%
+\vspace{1ex}%
+}
+}
+
+% figure paths
+\graphicspath{{.}{./figures/}}
+
+
+\endinput 
