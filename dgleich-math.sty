@@ -25,50 +25,116 @@
 
 \ProvidesClass{dgleich-math}[2010/08/02 v0.1 dgleich-math class]
 
+\newboolean{@dgleich@math@mathtools}
+\setboolean{@dgleich@math@mathtools}{true}
+\DeclareOption{nomathtools}{\setboolean{@dgleich@math@mathtools}{false}}
+\DeclareOption{mathtools}{\setboolean{@dgleich@math@mathtools}{true}}
+\ProcessOptions
+
 \RequirePackage{amsmath}
 %\RequirePackage{amssymb}
+\RequirePackage{onlyamsmath}
+
+\ifthenelse{\boolean{@dgleich@math@mathtools}}{%
+  \RequirePackage{mathtools}%
+}{}
 
 \RequirePackage[amsmath]{ntheorem}
 \theoremheaderfont{\normalfont\small\sffamily}
+%\theorempostwork{\marginnote{{\sffamily THEOREM \arabic{\theorem}}
 \newtheorem{theorem}{THEOREM}
 \newtheorem{lemma}[theorem]{LEMMA}
+
 
 
 %%
 %% Define alignment macros
 %%
+\ifthenelse{\boolean{@dgleich@math@mathtools}}{%
+  %defined by mathtools
+}{%
+  \def\clap#1{\hbox to 0pt{\hss#1\hss}}
+  \def\mathllap{\mathpalette\mathllapinternal}
+  \def\mathrlap{\mathpalette\mathrlapinternal}
+  \def\mathclap{\mathpalette\mathclapinternal}
+  \def\mathllapinternal#1#2{%
+    \llap{$\mathsurround=0pt#1{#2}$}}
+  \def\mathrlapinternal#1#2{%
+    \rlap{$\mathsurround=0pt#1{#2}$}}
+  \def\mathclapinternal#1#2{%
+    \clap{$\mathsurround=0pt#1{#2}$}}
+}
 
-\def\clap#1{\hbox to 0pt{\hss#1\hss}}
-\def\mathllap{\mathpalette\mathllapinternal}
-\def\mathrlap{\mathpalette\mathrlapinternal}
-\def\mathclap{\mathpalette\mathclapinternal}
-\def\mathllapinternal#1#2{%
-  \llap{$\mathsurround=0pt#1{#2}$}}
-\def\mathrlapinternal#1#2{%
-  \rlap{$\mathsurround=0pt#1{#2}$}}
-\def\mathclapinternal#1#2{%
-  \clap{$\mathsurround=0pt#1{#2}$}}
 
 %%
 %% Define stretch symbols
 %%
-\newcommand{\sstretchsym}[3]{\ensuremath{\left#1 #3 \right#2}}
-\newcommand{\nstretchsym}[3]{\ensuremath{#1 #3 #2}}
-\newcommand{\bstretchsym}[3]{\ensuremath{\bigl#1 #3 \bigr#2}}
-\newcommand{\Bstretchsym}[3]{\ensuremath{\Bigl#1 #3 \Bigr#2}}
-\newcommand{\hstretchsym}[3]{\ensuremath{\biggl#1 #3 \biggr#2}}
-\newcommand{\Hstretchsym}[3]{\ensuremath{\Biggl#1 #3 \Biggr#2}}
-\newcommand{\newstrechsymset}[4][s]{%
-  \expandafter\def\csname s#2of\endcsname{\sstretchsym{#3}{#4}}%
-  \expandafter\def\csname n#2of\endcsname{\nstretchsym{#3}{#4}}%
-  \expandafter\def\csname b#2of\endcsname{\bstretchsym{#3}{#4}}%
-  \expandafter\def\csname B#2of\endcsname{\Bstretchsym{#3}{#4}}%
-  \expandafter\def\csname h#2of\endcsname{\hstretchsym{#3}{#4}}%
-  \expandafter\def\csname H#2of\endcsname{\Hstretchsym{#3}{#4}}%
-  \expandafter\def\csname #2of\endcsname{\csname #1#2of\endcsname}%
+% \newcommand{\sstretchsym}[3]{\ensuremath{\left#1 #3 \right#2}}
+% \newcommand{\nstretchsym}[3]{\ensuremath{#1 #3 #2}}
+% \newcommand{\bstretchsym}[3]{\ensuremath{\bigl#1 #3 \bigr#2}}
+% \newcommand{\Bstretchsym}[3]{\ensuremath{\Bigl#1 #3 \Bigr#2}}
+% \newcommand{\hstretchsym}[3]{\ensuremath{\biggl#1 #3 \biggr#2}}
+% \newcommand{\Hstretchsym}[3]{\ensuremath{\Biggl#1 #3 \Biggr#2}}
+% \newcommand{\newstrechsymset}[6][s]{%
+%   \expandafter\def\csname s#2of\endcsname{\sstretchsym{#3}{#4}}%
+%   \expandafter\def\csname n#2of\endcsname{\nstretchsym{#3}{#4}}%
+%   \expandafter\def\csname b#2of\endcsname{\bstretchsym{#3}{#4}}%
+%   \expandafter\def\csname B#2of\endcsname{\Bstretchsym{#3}{#4}}%
+%   \expandafter\def\csname h#2of\endcsname{\hstretchsym{#3}{#4}}%
+%   \expandafter\def\csname H#2of\endcsname{\Hstretchsym{#3}{#4}}%
+%   \expandafter\def\csname #2of\endcsname{\csname #1#2of\endcsname}%
+% }
+% \newstrechsymset{norm}{}{\|}{\|}{}
+% \newstrechsymset{abs}{}{|}{|}{}
+
+\def\@dgleich@expand {\expandafter\@gobble\string}
+\ifthenelse{\boolean{@dgleich@math@mathtools}}{%
+% already has DeclarePairedDelimiter
+}{%
+  \newcommand*\DeclarePairedDelimiter[3]{%
+    \@ifdefinable{#1}{
+      \edef\MT_next: {\@dgleich@expand #1}
+      \@namedef{MT_delim_\MT_next: _star:}##1
+          {\left#2 ##1 \right #3}%
+      \@xp\@xp\@xp
+        \newcommand
+          \@xp\csname MT_delim_\MT_next: _nostar:\endcsname[2][\\@gobble]
+          { \edef\MT_next: {\MH_cs_to_str:N ##1}
+            \@nameuse {\MT_next: l} #2 ##2 \@nameuse {\MT_next: r} #3}
+      \newcommand{#1}{
+        \@ifstar
+          {\@nameuse{MT_delim_\MH_cs_to_str:N #1 _star:}}
+          {\@nameuse{MT_delim_\MH_cs_to_str:N #1 _nostar:}}
+      }
+    }
+  }
 }
-\newstrechsymset{norm}{\|}{\|}
-\newstrechsymset{abs}{|}{|}
+
+\newcommand*{\@dgleich@math@normof@star}[2][]{%
+  \left\|#2\right\|_{#1}%
+}
+\newcommand{\@dgleich@math@normof@inside}[2][\\@gobble]
+  {\edef\@dgleich@math@normof@style{\@dgleich@expand #1}%
+   {\@nameuse {\@dgleich@math@normof@style l} \| #2
+    \@nameuse {\@dgleich@math@normof@style r} \| }_{\@dgleich@math@normof@arg}}
+\newcommand{\@dgleich@math@normof}[1][]{%
+  \edef\@dgleich@math@normof@arg{#1}%
+  \@dgleich@math@normof@inside%
+}  
+\newcommand{\normof}{
+  \@ifstar
+    \@dgleich@math@normof@star%
+    \@dgleich@math@normof%
+}
+
+%\DeclarePairedDelimiter{\normof}{\|}{\|}
+%\newcommand{\normof}\@ifstar
+
+\DeclarePairedDelimiter{\absof}{|}{|}
+\DeclarePairedDelimiter{\BraceOf}{\{}{\}}
+\DeclarePairedDelimiter{\BracketOf}{[}{]}
+\DeclarePairedDelimiter{\ParensOf}{(}{)}
+
 
 \providecommand{\mat}[1]{\boldsymbol{\mathrm{#1}}}%
 %\dgleich@vecbftrue% set vecbf true to enable after loading MnSymbol
@@ -104,28 +170,32 @@
 \providecommand{\MAXfour}[6]{\begin{array}{ll} \MAXof[#1] & #2 \\ \subjectto  & #3 \\ & #4 \\ & #5 \\ & #6 \end{array}}
 
 \DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\hugeE}{\mbox{\huge\raise-0.3ex\hbox{E}}}
 \DeclareMathOperator{\p}{\mathbb{P}}
+\DeclareMathOperator{\hugep}{\mbox{\huge\raise-0.3ex\hbox{$\p$}}}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\Bias}{Bias}
 \DeclareMathOperator{\sign}{sign}
-\DeclareMathOperator{\Std}{Std}
-\providecommand{\Eof}[1]{\E\left[#1\right]}
-\providecommand{\Stdof}[1]{\Std\left[#1\right]}
-\providecommand{\Covof}[2]{\Cov\left[#1,#2\right]}
-\providecommand{\prob}[2][]{\p_{#1}\left[ #2 \right]}
+\DeclareMathOperator{\Std}{SD}
+\providecommand{\Eof}{\E\BracketOf}
+\providecommand{\hugeEof}{\hugeE\BracketOf}
+\providecommand{\Stdof}{\Std\BracketOf}
+%\providecommand{\Covof}[2]{\Cov\BrackeOf#1,#2\right]}
+\providecommand{\prob}[1][]{\p_{#1}\BraceOf}
+\providecommand{\hugeprob}[1][]{\hugep_{#1}\BraceOf}
 
 \DeclareMathOperator{\supp}{supp}
 \providecommand{\set}{\mathcal}
 \providecommand{\graph}{\mathcal}
 \providecommand{\mathdef}{\equiv}
-\providecommand{\card}[1]{\left| #1 \right|}
-\providecommand{\cardof}[1]{\left| #1 \right|}
+\providecommand{\card}{\absof}
+\providecommand{\cardof}{\absof}
 \providecommand{\eqdef}{\equiv}
 \providecommand{\eps}{\varepsilon}
 \DeclareMathOperator{\bigO}{O}
-\providecommand{\bigOof}[1]{\bigO\left(#1\right)}
-\providecommand{\absof}[1]{\left| #1 \right|}
+\providecommand{\bigOof}{\bigO\ParensOf}
+%\providecommand{\absof}[1]{\left| #1 \right|}
 
 \providecommand{\eye}{\mat{I}}
 \providecommand{\mA}{\ensuremath{\mat{A}}}

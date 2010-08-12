@@ -1,13 +1,18 @@
 %\documentclass{dgleich-article}
+%\RequirePackage[l2tabu, orthodox]{nag}
 \documentclass[longtitle,sidenotes]{dgleich-article}
 %\documentclass{article}
-\usepackage{showframe}
+%\usepackage{showframe}
 \usepackage{dgleich-math}
 
 \title{Shining a light into the digital dark age with computational approaches to digital stewardship}
 \author{David F. Gleich, Vinayak Ganeshan, Ying Wang, Nathan Sakunkoo, Farnaz Ronaghi, Xiangrui Meng, Amin Saberi, Margot Gerritsen}
 
 \begin{document}
+%\rule{\linewidth}
+%Test 
+%\hrule
+
  \maketitle
 
 \begin{abstract}
@@ -25,9 +30,26 @@ Recall that ``direct'' eigenvalue methods begin by reducing
 the matrix to a simpler form -- tridiagonal form for a
 symmetric matrix -- before applying the QR iteration.
 
-\begin{theorem}
+\begin{theorem}\marginnote{\sffamily THEOREM \thetheorem\\[1ex]}%\marginnote{Test}
  Test
 \end{theorem}
+
+\section{Math test}
+Here, we look at all the norm commands
+\[
+ \absof{\frac{1}{2}} \qquad \absof*{\frac{1}{2}} \qquad \absof[\Bigg]{\frac{1}{2}}
+\]
+
+\[
+ \normof{\frac{1}{2}} \qquad \normof*{\frac{1}{2}}
+ \qquad \normof[1]{\frac{1}{2}} 
+ \qquad \normof[1][\Bigg]{\frac{1}{2}} 
+\]
+
+\[ \Eof{\vx(A)} \]
+\[ \hugeEof{\vx(A)} \]
+\[ \hugeprob{\vx(A)} \hugeprob[x][\Bigg]{e^{-x^2}} \]
+
 
 
 \end{document}
