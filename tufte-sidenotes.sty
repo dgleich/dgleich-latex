@@ -29,10 +29,22 @@
 \DeclareOption{noreplace}{\setboolean{@tufte@sidenotes@replace@envs}{false}}
 \ProcessOptions
 
+% Create lengths to store the default paragraph options
+\newlength{\@tufte@reset@par@RaggedRightParindent}
+\newlength{\@tufte@reset@par@parindent}
+\newlength{\@tufte@reset@par@parskip}
+% Create a command to store them
+\newcommand{\@tufte@reset@par@store}{
+  \setlength{\@tufte@reset@par@RaggedRightParindent}{\RaggedRightParindent}%
+  \setlength{\@tufte@reset@par@RaggedRightParindent}{\parindent}%
+  \setlength{\@tufte@reset@par@RaggedRightParindent}{\parskip}%
+}
+% Store these variables at the start of the document.
+\AtBeginDocument{\@tufte@reset@par@store}
 \newcommand{\@tufte@reset@par}{%
-  \setlength{\RaggedRightParindent}{1.0pc}%
-  \setlength{\parindent}{1pc}%
-  \setlength{\parskip}{0pt}%
+  \setlength{\RaggedRightParindent}{\@tufte@reset@par@RaggedRightParindent}%
+  \setlength{\parindent}{\@tufte@reset@par@RaggedRightParindent}%
+  \setlength{\parskip}{\@tufte@reset@par@RaggedRightParindent}%
 }
 \@tufte@reset@par
 
