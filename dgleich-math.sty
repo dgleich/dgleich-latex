@@ -35,6 +35,13 @@
 %\RequirePackage{amssymb}
 \RequirePackage{onlyamsmath}
 
+% check for mathbb
+\expandafter\ifx\csname mathbb\endcsname\relax%
+  \RequirePackage{amssymb}
+\else%
+\fi%
+
+
 \ifthenelse{\boolean{@dgleich@math@mathtools}}{%
   \RequirePackage{mathtools}%
 }{}

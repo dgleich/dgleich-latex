@@ -23,6 +23,9 @@
 \RequirePackage{xifthen}
 \RequirePackage{ragged2e}
 \RequirePackage{setspace}
+%\RequirePackage[strict]{changepage}
+\RequirePackage[strict]{chngpage}
+\RequirePackage{caption}
 
 \newboolean{@tufte@sidenotes@replace@envs}
 \DeclareOption{replace}{\setboolean{@tufte@sidenotes@replace@envs}{true}}
@@ -186,17 +189,12 @@
 % Sidenote without the footnote mark
 
 \newcommand\marginnote[2][0pt]{%
-  %\let\cite\@tufte@infootnote@cite%   use the in-sidenote \cite command
-  %\gdef\@tufte@citations{}%           clear out any old citations%
-  
   \marginpar{\hbox{}\vspace*{#1}\@tufte@marginfont%
-    \def\baselinestretch {\setspace@singlespace}
+    \def\baselinestretch {\setspace@singlespace}%
   \reset@font\footnotesize%
   \@tufte@margin@par%                 use parindent and parskip settings for marginal text
   \@tufte@justification\vspace*{-1\baselineskip}\noindent #2%
   \@tufte@reset@par%                  use parindent and parskip settings for body text
-  %\@tufte@print@citations%            print any citations
-  %\let\cite\@tufte@normal@cite%       go back to using normal in-text \cite command
   }
 }
 
@@ -251,7 +249,7 @@
     \hbox{}\vspace*{#1}%
     \@tufte@justification%
     \@tufte@margin@par%
-    \noindent%
+    \noindent\ignorespaces%
   }
   {\end{minipage}%
   \end{lrbox}%
@@ -286,7 +284,7 @@
 \setboolean{@tufte@symmetric}{false}
 
 \newboolean{@tufte@changepage}
-\setboolean{@tufte@changepage}{true}
+\setboolean{@tufte@changepage}{false}
 
 % Write our own aliases for the \checkoddpage and \ifoddpage or \ifcpoddpage commands
 \newboolean{@tufte@odd@page}

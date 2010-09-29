@@ -25,6 +25,10 @@
 
 \ProvidesClass{dgleich-common}[2010/08/03 v0.0.1 dgleich-common class]
 
+%% Todo
+%% Add command for \lightlmtt
+%%
+
 
 %%
 % We use the `xifthen' package to handle our package option switches
@@ -42,8 +46,11 @@
 \RequirePackage{graphicx}
 \RequirePackage{geometry}
 \RequirePackage{tabularx}
+\RequirePackage{booktabs}
 \RequirePackage{ragged2e}
 \RequirePackage{setspace}
+\RequirePackage{xcolor}
+\RequirePackage{textcomp}
 %\RequirePackage{helvet}
 
 
@@ -55,6 +62,9 @@
 \setboolean{@dgleich@sidenotes}{true}
 \DeclareOption{sidenotes}{\setboolean{@dgleich@sidenotes}{true}}
 \DeclareOption{nosidenotes}{\setboolean{@dgleich@sidenotes}{false}}
+
+\newboolean{@dgleich@nofonts}
+\DeclareOption{nofonts}{\setboolean{@dgleich@nofonts}{true}}
 
 \newboolean{@dgleich@fancyfonts}
 \setboolean{@dgleich@fancyfonts}{true}
@@ -68,41 +78,87 @@
 \geometry{letterpaper,textwidth=350pt,textheight=680pt,tmargin=60pt,
             left=72pt,footskip=24pt,headsep=18pt,headheight=14pt}
 \ifthenelse{\boolean{@dgleich@sidenotes}}{%
-  \geometry{marginparwidth=140pt,left=50pt,marginparsep=18pt}%
+  \geometry{marginparwidth=144pt,left=48pt,marginparsep=18pt,tmargin=48pt}%
   \RequirePackage{tufte-sidenotes}%
 }{%no else
   
 }
 
 % Setup fancy fonts
+\ifthenelse{\boolean{@dgleich@nofonts}}
+{}%if no fonts, then ignore fonts
+{
+\RequirePackage[T1]{fontenc}
+\RequirePackage[latin1]{inputenc}
 \ifthenelse{\boolean{@dgleich@fancyfonts}}{%
-  \RequirePackage[T1]{fontenc}%
-  \RequirePackage[latin1]{inputenc}%
   \RequirePackage[minionint,openg,mathlf,mathtabular]{MinionPro}%
   \RequirePackage[scaled=0.8]{helvet}%
-}{}
+  \RequirePackage[scaled=0.9]{beramono}
+}{
+  % Setup computer modern property
+  \RequirePackage{ae}
+  % setup latin modern fonts for typewriter
+  \renewcommand{\ttdefault}{lmtt}
+  \renewcommand{\sfdefault}{lmss}
+}
+}
+
 
 %\theoremheaderfont{\normalfont\sffamily}
 %\usepackage{dgleich}
 
 
 \renewcommand{\abstractname}{}
+\renewcommand{\figurename}{FIGURE}
+\renewcommand{\tablename}{TABLE}
 
-% Setup CAMPTIONS
+\colorlet{TufteRed}{red!80!black}
+
+\newcommand{\email}[1]{\textsf{#1}}
+\newcommand{\acro}[1]{\textsc{\MakeTextLowercase{#1}}}
+
+% Setup CAPTIONS
 \RequirePackage{caption}
 \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,sc,scriptsize}}
 %\usepackage{amssymb}
 \RequirePackage{xkeyval,tkz-graph,varwidth}
   \usetikzlibrary{arrows,shapes}
-	\newcommand{\BlankVertexStyle}{%
-		\tikzstyle{NormalVertexStyle}=[minimum size=8pt,shape=circle]%
-	}
-	
+    \newcommand{\BlankVertexStyle}{%
+        \tikzstyle{NormalVertexStyle}=[minimum size=8pt,shape=circle]%
+    }
+    
 
-\renewcommand{\figurename}{FIGURE}
-\renewcommand{\tablename}{TABLE}
+% Setup paralist
+\setdefaultitem{\textperiodcentered}{\textendash}{\textopenbullet}{\textasteriskcentered}
+\setdefaultleftmargin{3em}{2em}{1em}{1em}{1em}{1em}
 
-\colorlet{TufteRed}{red!80!black}
+% Setup columns
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{L}[1]{>{\PreserveBackslash\RaggedRight}m{#1}}
+\newcolumntype{M}[1]{>{\PreserveBackslash\RaggedRight}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\RaggedLeft}m{#1}}
+\newcolumntype{S}[1]{>{\PreserveBackslash\RaggedLeft}p{#1}}
+\newcolumntype{Z}[1]{>{\PreserveBackslash\Centering}m{#1}}
+\newcolumntype{A}[1]{>{\PreserveBackslash\Centering}p{#1}}
+
+
+\newcolumntype{U}{>{\setlength{\RaggedRightParindent}{0pt}\RaggedRight\arraybackslash\noindent}X}
+\newcolumntype{V}{>{\RaggedLeft\arraybackslash}X}
+\newcolumntype{W}{>{\Centering\arraybackslash}X}
+
+%\newcolumntype{H}{>{\fontseries{b}\selectfont%
+  %\columncolor{shadecolor}[6pt][0pt]}l}
+%\newcolumntype{I}{>{\fontseries{b}\selectfont%
+  %\columncolor{shadecolor}[6pt][0pt]}c}
+%\newcolumntype{J}{>{\fontseries{b}\selectfont%
+  %\columncolor{shadecolor}[6pt][0pt]}r}
+%\newcommand{\hdcell}[2]{%
+  %\multicolumn{1}{#1@{}}{%
+    %\raisebox{.1mm}{%
+      %#2%
+    %}\rule{0pt}{4mm}}
+%}
+
 
 \newlength{\@suthesis@fullwidth}%
     \setlength{\@suthesis@fullwidth}{\textwidth}%
@@ -118,8 +174,6 @@
 \newenvironment{fullwidth}{\begin{adjustwidth}{}{-\@suthesis@overhang}}%
     {\end{adjustwidth}}
 
-
-
 \RequirePackage{soul}%
 \sodef\allcapsspacing{\upshape}{0.15em}{0.65em}{0.6em}%
 \sodef\smallcapsspacing{\scshape}{0.075em}{0.5em}{0.6em}%
@@ -128,6 +182,9 @@
 
 \newcommand{\sectionformat}[1]{\centering{\large\MakeTextLowercase{\smallcaps{#1}}}}
 \newcommand{\subsectionformat}[1]{\MakeTextUppercase{\smallcapsspacing{#1}}}
+\newcommand{\descriptionformat}[1]{\MakeTextLowercase{\smallcapsspacing{#1}}}
+
+
   
 \titleformat{\section}% the `%` must be RIGHT against the }
   [block]% shape
@@ -153,9 +210,11 @@
   []% after the title body
 \titlespacing*{\paragraph}{0pt}{1\baselineskip}{1\baselineskip}  
 
+\renewcommand{\descriptionlabel}{\hspace*{\labelsep}\descriptionformat}   % spacedlowsmallcaps textit textsc     
 
 \ifthenelse{\boolean{@dgleich@longtitle}}{%
 \renewcommand{\maketitle}{%
+\vspace*{-1em}
 \hrule%
 \noindent%
 \parbox{0.75\textwidth}{%
@@ -178,6 +237,7 @@
 }{% provide the short title
 %\makeatletter
 \renewcommand{\maketitle}{%
+\vspace*{-\baselineskip}
 \hrule%
 \noindent%
 \parbox{0.4\textwidth}{%
