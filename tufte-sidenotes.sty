@@ -23,8 +23,16 @@
 \RequirePackage{xifthen}
 \RequirePackage{ragged2e}
 \RequirePackage{setspace}
-%\RequirePackage[strict]{changepage}
-\RequirePackage[strict]{chngpage}
+
+\newboolean{@tufte@changepage}
+\IfFileExists{changepage.sty}{%
+  \RequirePackage[strict]{changepage}
+  \setboolean{@tufte@changepage}{true}
+}{%
+  \RequirePackage[strict]{chngpage}
+  \setboolean{@tufte@changepage}{false}
+}
+
 \RequirePackage{caption}
 
 \newboolean{@tufte@sidenotes@replace@envs}
@@ -39,17 +47,16 @@
 % Create a command to store them
 \newcommand{\@tufte@reset@par@store}{
   \setlength{\@tufte@reset@par@RaggedRightParindent}{\RaggedRightParindent}%
-  \setlength{\@tufte@reset@par@RaggedRightParindent}{\parindent}%
-  \setlength{\@tufte@reset@par@RaggedRightParindent}{\parskip}%
+  \setlength{\@tufte@reset@par@parindent}{\parindent}%
+  \setlength{\@tufte@reset@par@parskip}{\parskip}%
 }
 % Store these variables at the start of the document.
 \AtBeginDocument{\@tufte@reset@par@store}
 \newcommand{\@tufte@reset@par}{%
   \setlength{\RaggedRightParindent}{\@tufte@reset@par@RaggedRightParindent}%
-  \setlength{\parindent}{\@tufte@reset@par@RaggedRightParindent}%
-  \setlength{\parskip}{\@tufte@reset@par@RaggedRightParindent}%
+  \setlength{\parindent}{\@tufte@reset@par@parindent}%
+  \setlength{\parskip}{\@tufte@reset@par@parskip}%
 }
-\@tufte@reset@par
 
 % Paragraph indentation and separation for marginal text
 \newcommand{\@tufte@margin@par}{%
@@ -283,9 +290,6 @@
 \newboolean{@tufte@symmetric}
 \setboolean{@tufte@symmetric}{false}
 
-\newboolean{@tufte@changepage}
-\setboolean{@tufte@changepage}{false}
-
 % Write our own aliases for the \checkoddpage and \ifoddpage or \ifcpoddpage commands
 \newboolean{@tufte@odd@page}
 \setboolean{@tufte@odd@page}{true}
@@ -371,7 +375,6 @@
     % build the caption box
     \begin{lrbox}{\@tufte@caption@box}%
       \begin{minipage}[\floatalignment]{\marginparwidth}\hbox{}%
-
         \ifthenelse{\NOT\equal{\@tufte@stored@caption}{}}{%\@tufte@orig@caption[\@tufte@stored@shortcaption]{\@tufte@stored@caption}}{}%
           \ifthenelse{\equal{\tuftecaptioncommand}{}}{%
             \@tufte@orig@caption[\@tufte@stored@shortcaption]{\@tufte@stored@caption}

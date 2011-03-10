@@ -7,6 +7,10 @@
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesClass{dgleich-article}[2010/07/29 v0.0.1 dgleich-article class]
 
+% options
+%   twocolumn
+%
+
 %%
 % The symmetric option forces twoside.
 % \DeclareOption{symmetric}{%

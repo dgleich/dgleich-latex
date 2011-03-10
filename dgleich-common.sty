@@ -40,7 +40,15 @@
 \RequirePackage{microtype}
 \RequirePackage{paralist}
 \RequirePackage{listings}
-\RequirePackage{chngpage}
+\newboolean{@dgleich@changepage}
+\IfFileExists{changepage.sty}{%
+  \RequirePackage[strict]{changepage}
+  \setboolean{@dgleich@changepage}{true}
+}{%
+  \RequirePackage[strict]{chngpage}
+  \setboolean{@dgleich@changepage}{false}
+}
+
 \RequirePackage{titlesec}
 \RequirePackage{textcase}
 \RequirePackage{graphicx}
@@ -51,7 +59,6 @@
 \RequirePackage{setspace}
 \RequirePackage{xcolor}
 \RequirePackage{textcomp}
-%\RequirePackage{helvet}
 
 
 \newboolean{@dgleich@longtitle}
@@ -70,6 +77,8 @@
 \setboolean{@dgleich@fancyfonts}{true}
 \DeclareOption{fancyfonts}{\setboolean{@dgleich@fancyfonts}{true}}
 \DeclareOption{nofancyfonts}{\setboolean{@dgleich@fancyfonts}{false}}
+
+\newboolean{@dgleich@sanssmallcaps}
 
 \ProcessOptions
 
@@ -93,7 +102,8 @@
 \ifthenelse{\boolean{@dgleich@fancyfonts}}{%
   \RequirePackage[minionint,openg,mathlf,mathtabular]{MinionPro}%
   \RequirePackage[scaled=0.8]{helvet}%
-  \RequirePackage[scaled=0.9]{beramono}
+  \RequirePackage[scaled=0.75]{beramono}%
+  \setboolean{@dgleich@sanssmallcaps}{true}
 }{
   % Setup computer modern property
   \RequirePackage{ae}
@@ -119,7 +129,11 @@
 
 % Setup CAPTIONS
 \RequirePackage{caption}
-\captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,sc,scriptsize}}
+\ifthenelse{\boolean{@dgleich@sanssmallcaps}}{%
+  \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,sc,scriptsize}}%
+}{%
+  \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,scriptsize}}%
+}
 %\usepackage{amssymb}
 \RequirePackage{xkeyval,tkz-graph,varwidth}
   \usetikzlibrary{arrows,shapes}
@@ -161,12 +175,12 @@
 
 
 \newlength{\@suthesis@fullwidth}%
-    \setlength{\@suthesis@fullwidth}{\textwidth}%
-    \addtolength{\@suthesis@fullwidth}{\marginparsep}%
-    \addtolength{\@suthesis@fullwidth}{\marginparwidth}%
-    \newlength{\@suthesis@overhang}%
-    \setlength{\@suthesis@overhang}{\marginparwidth}%
-    \addtolength{\@suthesis@overhang}{\marginparsep}%
+\setlength{\@suthesis@fullwidth}{\textwidth}%
+\addtolength{\@suthesis@fullwidth}{\marginparsep}%
+\addtolength{\@suthesis@fullwidth}{\marginparwidth}%
+\newlength{\@suthesis@overhang}%
+\setlength{\@suthesis@overhang}{\marginparwidth}%
+\addtolength{\@suthesis@overhang}{\marginparsep}%
 
 %\renewenvironment{fullwidth}
     %{\begin{adjustwidth}[]{}{-\@suthesis@overhang}}
@@ -177,11 +191,16 @@
 \RequirePackage{soul}%
 \sodef\allcapsspacing{\upshape}{0.15em}{0.65em}{0.6em}%
 \sodef\smallcapsspacing{\scshape}{0.075em}{0.5em}{0.6em}%
+\ifthenelse{\boolean{@dgleich@sanssmallcaps}}{%
+  \sodef\sanssmallcapsspacing{\scshape}{0.075em}{0.5em}{0.6em}%
+}{
+ \sodef\sanssmallcapsspacing{\upshape}{0.075em}{0.5em}{0.6em}%
+}
 \newcommand{\smallcaps}{\scshape\smallcapsspacing}
 
 
 \newcommand{\sectionformat}[1]{\centering{\large\MakeTextLowercase{\smallcaps{#1}}}}
-\newcommand{\subsectionformat}[1]{\MakeTextUppercase{\smallcapsspacing{#1}}}
+\newcommand{\subsectionformat}[1]{\MakeTextUppercase{\sanssmallcapsspacing{#1}}}
 \newcommand{\descriptionformat}[1]{\MakeTextLowercase{\smallcapsspacing{#1}}}
 
 

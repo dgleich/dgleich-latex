@@ -1,9 +1,11 @@
 %\documentclass{dgleich-article}
 %\RequirePackage[l2tabu, orthodox]{nag}
-\documentclass[longtitle,sidenotes]{dgleich-article}
+\documentclass[longtitle,sidenotes,nofancyfonts]{dgleich-article}
 %\documentclass{article}
 %\usepackage{showframe}
 \usepackage{dgleich-math}
+
+
 
 \title{Shining a light into the digital dark age with computational approaches to digital stewardship}
 \author{David F. Gleich, Vinayak Ganeshan, Ying Wang, Nathan Sakunkoo, Farnaz Ronaghi, Xiangrui Meng, Amin Saberi, Margot Gerritsen}
@@ -35,6 +37,9 @@ symmetric matrix -- before applying the QR iteration.
 \end{theorem}
 
 \section{Math test}
+Check that math-blackboard-bold works:
+Let $\vx \in \mathbb{R}^n$.
+
 Here, we look at all the norm commands
 \[
  \absof{\frac{1}{2}} \qquad \absof*{\frac{1}{2}} \qquad \absof[\Bigg]{\frac{1}{2}}
@@ -49,6 +54,28 @@ Here, we look at all the norm commands
 \[ \Eof{\vx(A)} \]
 \[ \hugeEof{\vx(A)} \]
 \[ \hugeprob{\vx(A)} \hugeprob[x][\Bigg]{e^{-x^2}} \]
+
+\section{Fonts}
+
+\subsection{Typewriter}
+
+With the \verb#fancyfonts# option, 
+we use the \verb#beramono# font -- a nicely crafted typewriter font that contrasts
+with the fine serifs of Adobe's Minion Pro and has a complementary softness
+to the starkness of Helvetica.  
+
+\begin{quote}
+\ttfamily 
+Here is an example of typewriter text.
+\end{quote}
+
+Without the fancyfonts option, we'd like to use the standard computer modern
+typewriter typeface.  However, computer modern lacks a native bold typewriter type.  
+\begin{quote}
+ \ttfamily
+\textbf{Here} is an example of \textbf{BOLD} typewriter text.
+\end{quote}
+
 
 
 
