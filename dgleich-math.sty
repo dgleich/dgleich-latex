@@ -25,6 +25,8 @@
 
 \ProvidesClass{dgleich-math}[2010/08/02 v0.1 dgleich-math class]
 
+\RequirePackage{xifthen}
+
 \newboolean{@dgleich@math@mathtools}
 \setboolean{@dgleich@math@mathtools}{true}
 \DeclareOption{nomathtools}{\setboolean{@dgleich@math@mathtools}{false}}
@@ -46,11 +48,28 @@
   \RequirePackage{mathtools}%
 }{}
 
-\RequirePackage[amsmath]{ntheorem}
+\RequirePackage[amsmath,thmmarks]{ntheorem}
+\theoremstyle{plain}
 \theoremheaderfont{\normalfont\small\sffamily}
 %\theorempostwork{\marginnote{{\sffamily THEOREM \arabic{\theorem}}
 \newtheorem{theorem}{THEOREM}
 \newtheorem{lemma}[theorem]{LEMMA}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{corollary}[theorem]{COROLLARY}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{remark}[theorem]{REMARK}
+%\newtheorem*{remark*}{Remark}
+\newtheorem{definition}[theorem]{DEFINITION}
+\newtheorem{example}[theorem]{EXAMPLE}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+
+\theoremstyle{nonumberplain}
+\theoremheaderfont{\normalfont\sffamily}
+\theorembodyfont{\normalfont\upshape}
+\theoremsymbol{\ensuremath{_\blacksquare}}
+\newtheorem{proof}{Proof}
 
 
 
