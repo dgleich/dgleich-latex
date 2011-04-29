@@ -1,0 +1,314 @@
+\documentclass[nofonts]{dgleich-article}
+\usepackage{dgleich-math}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[square]{rnatbib}
+\DeclareMathOperator{\trace}{tr}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\cut}{cut}
+
+\newcommand{\mnL}{\mat{\tilde{L}}}
+\newcommand{\mnM}{\mat{\tilde{M}}}
+\newcommand{\tlambda}{\tilde{\lambda}}
+\newcommand{\teta}{\tilde{\eta}}
+\newcommand{\meye}{\mI}
+\renewcommand{\vpi}{\vec{\pi}}
+\title{Eigenvalues and Eigenvectors of Graphs}
+\author{David F. Gleich}
+\begin{document}
+\maketitle
+
+\section{Notation}
+
+\begin{marginfigure}
+\caption{Test, what happens with really long captions here?  Why don't I get equal
+weird hboxes and that jazz?} 
+\end{marginfigure}
+
+
+Assume that we are working with undirected graphs. Let $G$
+denote the combinatorial graph structure, that is $G = (V,E)$ 
+where $V$ is the set of vertices and $E$ is the set of edges.
+Let $n = \cardof{V}$ be the number of vertices and $m = \cardof{E}$
+be the number of edges. 
+Given a particular graph, it's adjacency matrix $\mA$
+is an $n \times n$ matrix:
+\[ A_{i,j} = A_{j,i} = \begin{cases} 1 & \text{ if $(i,j) \in E$ } \\
+                                     0 & \text{ otherwise }.
+                       \end{cases}
+\]
+where we have associated each vertex $v \in V$ with a row and
+column of $\mA$.  Let $d_i$ denote the degree of vertex $i$, and
+let $\vd$ be the vector of all degrees.  Note that $\vd = \mA \ve$
+where $\ve$ is the vector of all ones.  Borrowing a convention
+from optimization, let $\mD$ be the diagonal matrix with $\vd$
+on its diagonal.  Finally, for a subset of vertices $S \subseteq V$, let 
+\[ \vol(S) = \sum_{v \in S} d_v \text{ and } 
+    \cut(S) = \cardof*{ \BraceOf{ v : (u,v) \in E, u \in S, v \not\in S} }.
+\]
+
+In what follows, we will be concerned with other matrices that arise
+in graph analysis and show their relationships.
+
+\section{The matrices}
+
+In this section, we just introduce new matrices.  In later sections, we motivate
+them with applications.
+
+\subsection{The Laplacian}
+The Laplacian matrix of a graph $G$ is defined:
+\[ \mL = \mD - \mA. \]
+Let $\lambda_1 \le \ldots \le \lambda_n$ be the eigenvalues of $\mL$.
+Then $\lambda_1 = 0$ because $\ve$ is always a null vector,
+and $\lambda_2 > 0$ when $G$ is connected.  The eigenvalue $\lambda_2$
+is also called the algebraic connectivity of $G$ and it's eigenvector
+is known as the Fiedler vector.  Given any subset of vertices $S$, 
+\[ \cut(S) \ge \lambda_2 \cardof{S} (1 - \cardof{S}/n). \]
+By Gergorshin disks, $\lambda_n \le 2 (\max_i d_i).$
+
+\subsection{The normalized Laplacian}
+The normalized Laplacian matrix of a graph is defined:
+\[ \mnL = \eye - \mD^{-1/2} \mA \mD^{-1/2}. \]
+With respect to the Laplacian $\mL$, it satisfies: $\mnL = \mD^{-1/2} \mL \mD^{-1/2}$.
+Let $\tlambda_1 \le \ldots \le \tlambda_n$ be the eigenvalues of $\mnL$.
+Again, $\tlambda_1 = 0$ because $\mD^{1/2} \ve$ is an null vector,
+and $\tlambda_2 > 0$ if $G$ is connected.  For reasons that shall be made
+clear shortly, the value $\tlambda_2$ is known as the spectral gap, 
+and $\tlambda_n \le 2$.
+Let $\mnL \vy = \tlambda_2 \vy$.
+Then $\vz = \mD^{-1/2} \vy$ is the normalized Fiedler vector.  This vector 
+is the generalized eigenvector $\mL \vz = \tlambda_2 \mD \vz$.
+The conductance of a graph\footnote{This relationship is taken 
+from Dan Spielman's notes: \url{www.cs.yale.edu/homes/spielman/561/lect07-09.pdf}.}
+is 
+\[ \phi_G = \min_{S \subset G} \vol(G) \frac{\cut(S)}{\vol(S) (\vol(G) - \vol(S))}. \]
+Although computing $\phi_G$ is \acro{NP}-hard, 
+the eigenvalue $\tlambda_2$ bounds $\phi_G$: 
+\[ \sqrt{2 \tlambda_2}  \ge \phi_G \ge \tlambda_2/2. \]
+Moreover, the vector $\mD^{1/2} \vy$ identifies a graph cut that obeys these bounds.  
+
+
+\subsection{The Markov chain}
+Let $\mP$ be the transition matrix for a uniform random walk on an undirected graph $G$.  To avoid
+technical complications, we assume that $\mP$ is a regular matrix and that $G$ 
+is connected.\footnote{If $G$ is a bipartite graph, then the following analysis applies
+to the lazy random walk.}
+Formally, 
+\[ \mP = \mD^{-1} \mA. \]
+Now, let $\mu_1 \ldots, \mu_n$ be the eigenvalues of $\mP$.  These eigenvalues are all
+real because the eigenvalues of $\mP$ are equivalent to the eigenvalues of 
+$\mD^{-1/2} \mA \mD^{-1/2}$.  Because that matrix appears in the normalized Laplacian, there 
+are some concrete relationships between the two, which we now expound. By standard properties
+of Markov matrices $\mu_n = 1$ and $\mu_{n-1} < \mu_n$.  Thus,
+the spectral gap $\gamma = 1-\mu_{n-1}$ is always positive \cite{levin2008-markov}.  Let $t^* = 1/\gamma$.
+The $\eps$-mixing time of a Markov chain, the number of steps of a Markov chain required before
+has reached a total variation distance $\epsilon$ away from stationarity, satisfies: 
+\[ (t^* -1) \log\ParensOf{ \frac{1}{2\eps} } \le \eps\text{-mixing time} 
+     \le \log \ParensOf{\frac{1}{\eps \pi_{\text{min}} }} t^{*}. \]
+(The value $ \pi_{\text{min}}$ is the minimum element in the stationary distribution.)
+
+Now, note that $\tlambda_i = 1 - \mu_{n-i+1}$ and in particular, $\tlambda_2 = 1 - \mu_{n-1} = \gamma$. 
+It is for this reason that we call $\tlambda_2$ the spectral gap.  
+Further, let $\vz$ be an eigenvector of $\mP$, then 
+$\vy = \mD^{1/2} \vz$ is an eigenvector of $\mnL$.  
+
+One final property of the Markov chain is that the stationary distribution of 
+$\mP$ is \[ \vpi^T = \frac{1}{\vol(G)} \vd^T. \]
+This fact is easy enough to prove for a symmetric adjacency matrix $\mA$:
+\[ \vpi^T \mP = \frac{1}{\vol(G)} \vd^T \mD^{-1} \mA = \frac{1}{\vol{G}} \ve^T \mA = \frac{1}{\vol(G)} \vd^T. \]
+We will use this fact shortly.
+
+\subsection{Newman's modularity}
+
+Newman's modularity matrix is defined 
+\[ \mM = \mA - \frac{1}{\vol(G)} \vd \vd^T. \]
+Given a community assignment matrix 
+$\mC$ : $n \times k$, where $C_{i,j} = 1$ if node $i$ is in community
+$j$, then $\frac{1}{2 \vol(G)} \trace ( \mC^T \mM \mC )$ is the
+modularity score for that assignment.  We are interested
+in high modularity scores, and thus the largest eigenvalues
+and eigenvectors of $\mM$ indicate communities.  
+
+Let $\eta_1 \le \ldots \le \eta_n$ be the eigenvalues of $\mM$.  There
+isn't too much more to say about modularity.  What we will show now
+is that an attempt to ``normalize'' the modularity scores produces
+the normalized Fiedler vector.  Consider the problem in terms
+of the Markov chain transition matrix: 
+\[ \mD^{-1} \mM = \mP - \frac{1}{\vol(G)} \mD^{-1} \vd \vd^T = \mP - \ve \vpi^T. \]
+Thus, the largest eigenvalues and vectors of the modularity matrix correspond
+to the largest generalized eigenvalued and vectors of 
+\[ (\mP - \ve \vpi^T) \vx = \eta \mD^{-1} \vx. \]
+The matrix $\mP - \ve \vpi^T$ has a few names is known as
+the decay matrix of a Markov chain~\cite{jonsson1997-cutoff}.
+It is closely related to the inverse Greens 
+matrix~\cite{ollivier2007-greens}.  Let $\mC = \mP - \ve \vpi^T$.
+This matrix is just a deflation of $\mP$ because $\ve$ and $\vpi$
+are the two domination eigenvectors with eigenvalue $1$.
+Thus, the spectral radius of $\mC$ is less than 1.  And 
+the modularity problem is 
+\[ (\mP - \ve \vpi^T) \vz = \mC \vz = \eta_n \mD^{-1} \vz. \]
+
+By the same analysis, the Fiedler vector is 
+\[ (\eye - \mP) \vx = \lambda_{2} \mD^{-1} \vx. \]
+Whereas the normalized Fiedler vector is 
+\[ (\eye - \mP) \vy = \tlambda_2 \vy. \]
+This suggests that a normalized modularity is 
+\[ (\mP - \ve \vpi^T) \vw = \mC \vw = \teta_n \vw. \]
+Equivalently, the normalized Fielder vector is 
+\[ (\mD - \mA) \vy = \tlambda_2 \mD \vy,\]
+which suggests annother possibility for the normalized modularity: 
+\[ (\mA - \frac{1}{\vol(G)} \vd \vd^T) \vw = \teta_n \mD \vw. \]
+Indeed, these two choices are equivalent.  Moreover, $\vw = \vy$, 
+the normalized Fiedler vector.  The first fact is obvious 
+by the construction of $\mC$.  The second fact follows because
+$(\eye - \mP)$ and $\mC$ have the same eigenvectors.  In the matrix
+$(\eye - \mP)$ we are looking for the second smallest eigenvalue/eigenvector.  
+In $\mC$, we have deflated the first eigenvalue/eigenvector pair and reverse
+the order so that the largest coincides.  Consequently, 
+the ``normalized'' modularity is the same as the normalized Fiedler vector.  
+
+\subsection{Summary}
+
+We now summarize all of these relationships in by showing the symmetric form
+of each problem and the Markov chain form of each problem.  Note that 
+\citet{Shi2000-normalized-cuts} define a few other variations that
+should be included in this table.  
+\begin{fullwidthtable}
+ %\caption{Note that we must adjust the outputs of the normalized
+ % Laplacian computation and the normalized modularity.}
+\caption{mmarize all of these relationships in by showing the symmetric form
+of each problem and the Markov chain form of each problem.  Note th}
+ \begin{tabularx}{\linewidth}{XlXX}
+  \toprule
+   matrix & definition & spectrum target & Markov chain problem\\
+  \midrule
+   Adjacency & $\mA$ & largest & $\mP \vx = \lambda_n \mD^{-1} \vx$\\[1ex]
+   Laplacian & $\mL = \mD - \mA$ & 2nd smallest & $(\eye - \mP) \vx = \lambda_{2} \mD^{-1} \vx$\\[1ex]
+   Normalized Laplcian & $\mnL = \eye - \mD^{-1/2} \mA \mD^{-1/2}$ & 2nd smallest 
+     & $(\eye - \mP) \vx = \tlambda \vx$\\[1ex]
+   Modularity & $\mM = \mA - \frac{1}{\vol(G)} \vd \vd^T$ & largest 
+     & $(\mP - \ve \vpi^T) \vx = \eta_n \mD^{-1} \vx$\\[1ex]
+   Normalized Modularity & $\mnM = \mD^{-1/2} \mA \mD^{-1/2} - \frac{1}{\vol(G)} \mD^{1/2} \ve \ve^T \mD^{1/2}$
+     & largest & $(\mP - \ve \vpi^T) \vx = (1-\tlambda_2) \vx$\\ 
+   \bottomrule
+ \end{tabularx}
+\end{fullwidthtable}
+
+
+\subsection{And they come out all the same}
+
+Let $G$ be a degree regular graph (all vertices have
+the same degree) with degree $\omega$.  Then 
+\[ \begin{aligned}
+    \mL & = \omega \meye - \mA \\
+    \mnL & = \meye - \frac{1}{\omega} \mA \\
+    \mP & = \frac{1}{\omega} \mA \\
+    \mM & = \mA - \frac{\omega}{n} \ve \ve^T \\
+    \mnM & = \frac{1}{\omega} \mA - \frac{1}{n} \ve \ve^T 
+   \end{aligned} \]
+In this case, all of the eigenvectors coincide between
+all of the variations.  
+
+\subsection{Directed graphs}
+
+\citet{Chung2005-directed-laplacian} proposed extensions of many of these 
+techniques to directed graphs.  
+The key idea was exploiting the relationship between $\vpi$ and $\vd$.
+For a directed graph, we just replace $\vd$ with $\vpi$ -- the stationary 
+distribution of a uniform random walk on the graph.
+When the directed graph does not have a unique stationary distribution,
+\citet{zhou2005-directed-learning} proposes using the PageRank
+modification of a Markov chain.  This always produces a unique stationary
+distribution.  More recently, Boley et al. (2010)
+studied asymmetric Laplcians.  
+
+\section{Extra detail}
+
+\subsection{The Laplacian}
+
+The Laplacian matrix of a graph $G$ is defined:
+\[ \mL = \mD - \mA. \]
+It has many helpful properties.  Given a subset of vertices $S \subseteq V$
+let  $\vf_S$ be the vector where $\vf_i = 1$ if $i \in S$ and $\vf_i = -1$
+otherwise.  Then 
+\[ \cut(S) = \frac{1}{4} \vf_S^T \mL \vf_S. \]
+
+
+Because of this relationship, we are often interested in solving the following
+integer program:
+\[ \MINone{\vf}{\vf^T \mL \vf}{f_i \in \{-1, 1\}, \ve^T \vf = 0. }  \]
+A solution vector $\vf$ indicates a set of half the vertices of the
+graph with the smallest number of edges between the two halfs.\footnote{
+As our astute readers noted, if the graph has an odd number of vertices,
+then satisfying the constraint $\ve^T \vf = 0$ is impossible.  No matter,
+we just introduce an extra vertex without any connections and this does not 
+change the problem.}  This problem is known as the \emph{minimimum bisection}
+problem and is known to be \acro{NP}-hard.
+
+To approximate the solution, we relax the integer constraint and consider
+the eigenvalue problem: 
+\[ \MINone{\vf}{\vf^T \mL \vf}{\ve^T \vf = 0, \vf^T \vf = n.} \]
+This relaxation motivates studying the smallest eigenvectors of
+the Laplacian matrix.
+
+
+\subsection{Modularity matrix Properties}
+Recall Newman's Modularity matrix $\mM$
+is defined as 
+\[ \mM \eqdef \mA - \frac{1}{\vol(G)} \vd \vd^T. \]
+Given an assignment of nodes to communities, the matrix
+$\mM$ allows us to compute the total modularity score 
+for that assignment.  That is, 
+let $\mC$ be the community assignment matrix 
+\[ C_{i,k} = \begin{cases} 1 & \text{ node $i$ is in community $k$ } \\
+                           0 & \text{ otherwise.}
+             \end{cases}
+\]
+Then 
+\[ Q(\mC) = \frac{1}{\vol(G)} \trace(\mC^T \mM \mC). \]
+In the special case when there are only two communities, we
+can replace the matrix $\mC$ with a vector $\vs$.  That is,
+let $s_{i} = 1$ if $i$ is the first community and $s_{i} = -1$
+if it is in the second.  Then 
+\[ Q(\vs) = \frac{1}{2 \vol(G)} \vs^T \mM \vs. \]
+Let's get into the properties of the matrix $\mM$.  
+
+First, the matrix $\mM$ is symmetric because the adjacency
+matrix of an undirected graph is symmetric.
+
+The matrix $\mM$ is indefinite.
+
+The number of zero eigenvalues is not related to the
+number of connected components.
+(example: one component is a 5-cycle, one component is a 6-cycle).  
+
+
+\section{Applications}
+
+\begin{enumerate}
+\item Clustering/partitioning/communities -- Laplacian, modularity not going to go into details \cite{Fiedler1973-algebraic-connectivity,Shi2000-normalized-cuts,%
+Newman2004-community}
+\item Commute time/hitting times/resistances -- Laplacian (non-normalized)
+\cite{Gobel1974-random-walks}
+\item Eigenmaps/Isomaps/Low-dimensional embedings -- Laplacians
+\item  Markov chain analysis -- Normalized Laplacian/Transition matrix
+\cite{levin2008-markov}
+\item  Eigenvector centrality -- largest eignvector of the Adjacency matrix -- Bonarich, Eigen-spokes (Faloustos et al.)?
+\item  Epidemiology -- largest eigenvalue of the Adjacency matrix -- many authors
+(Saberi et al.200x, Faloustos et al. 200x)
+\item  Bounds for max-clique and max-subgraph isomorphism and graph coloring 
+\cite{motzkin1965-turan}  Lagrangian of a graph: Wilf 1967,
+\url{http://www.springerlink.com/content/4557855012l401j8/fulltext.pdf}
+\item  Studying the Kuramoto model of synchronization \cite{arenas2008-synchronization}
+\end{enumerate}
+
+\paragraph{Kuromoto oscillator}
+
+
+
+
+
+\bibliographystyle{dgleichurlshortlinktitles}
+\bibliography{../bibliography/all-bibliography}
+ 
+\end{document}
