@@ -1,0 +1,81 @@
+\usepackage[scaled=0.80]{beramono}
+
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize\@xpt{14}%
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalbaselineskip=14pt
+\normalsize
+\renewcommand\small{%
+   \@setfontsize\small\@ixpt{12}%
+   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus2\p@
+   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 4\p@ \@plus2\p@ \@minus2\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\renewcommand\footnotesize{%
+   \@setfontsize\footnotesize\@viiipt{10}%
+   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 3\p@ \@plus\p@ \@minus\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\renewcommand\large{\@setfontsize\large\@xipt{15}}
+\renewcommand\Large{\@setfontsize\Large\@xiipt{16}}
+\renewcommand\LARGE{\@setfontsize\LARGE\@xivpt{18}}
+\renewcommand\huge{\@setfontsize\huge\@xxpt{30}}
+\renewcommand\Huge{\@setfontsize\Huge{24}{36}}
+
+%\setlength\leftmargini   {1pc}
+%\setlength\leftmarginii  {1pc}
+%\setlength\leftmarginiii {1pc}
+%\setlength\leftmarginiv  {1pc}
+%\setlength\leftmarginv   {1pc}
+%\setlength\leftmarginvi  {1pc}
+%\setlength\labelsep      {.5pc}
+%\setlength\labelwidth    {\leftmargini}
+%\addtolength\labelwidth{-\labelsep}
+
+\usepackage{ifpdf}
+\usepackage{xcolor}
+%\colorlet{theblue}{blue!80!black}
+\definecolor{theblue}{RGB}{0,0,180}
+\colorlet{thered}{TufteRed}
+\ifpdf%
+  \RequirePackage[colorlinks,pdfdisplaydoctitle
+      ,citecolor=theblue
+      ,linkcolor=theblue
+      ,urlcolor=theblue
+      ,hyperfootnotes=false,pdftex,pagebackref]{hyperref}%
+\else
+  \RequirePackage[colorlinks,pdfdisplaydoctitle
+      ,citecolor=theblue
+      ,linkcolor=theblue
+      ,urlcolor=theblue
+      ,hyperfootnotes=false,dvipdfm,pagebackref]{hyperref}
+\fi
+%% Configure backreference from bibliography to pages in hyperref
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{%
+  \ifcase #1 %
+    No citations.%
+  \or
+    Cited on page #2.%
+  \else
+    Cited on pages #2.%
+  \fi
+}
+
