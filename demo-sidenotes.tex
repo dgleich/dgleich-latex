@@ -1,0 +1,46 @@
+\documentclass{article}
+
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{tabularx}
+\geometry{lmargin=72pt,tmargin=72pt,textwidth=350pt,marginparwidth=144pt}
+\usepackage{tufte-sidenotes}
+
+\begin{document}
+Here is demo of the \verb#tufte-sidenotes# style.
+
+First, we have a paragraph of text.\footnote{This is incorrect, it's really a sentence, which could be a paragraph.}
+
+Next, we have a margin figure.
+\begin{marginfigure}
+\centering
+\rule{1in}{1in}
+\caption{This figure is dull.}
+\end{marginfigure}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin auctor, ante eget vulputate facilisis, diam augue rutrum magna, vel ultrices lacus odio non mi. Quisque pulvinar lacus vitae arcu mollis pharetra. Donec ut turpis auctor nulla luctus lacinia. Donec scelerisque venenatis turpis sit amet semper. Quisque velit felis, consequat in lacinia quis, luctus sit amet erat. Curabitur lobortis euismod felis id sollicitudin. Suspendisse nibh mi, vestibulum et accumsan id, pellentesque id erat. Suspendisse facilisis eros in nulla fermentum nec hendrerit magna aliquam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla urna nulla, rhoncus non dictum nec, convallis ac nibh. Sed ullamcorper fringilla pharetra. Curabitur posuere lacinia nunc, eget convallis mauris commodo eget. Donec sit amet lorem in tortor ullamcorper convallis. Proin id dolor id arcu adipiscing venenatis eget vitae nibh.
+
+Etiam convallis diam vel metus pulvinar facilisis. Suspendisse lobortis pellentesque nisi, eget varius lacus tempor tincidunt. In nulla lacus, interdum eget consectetur nec, bibendum a felis. Pellentesque sagittis porttitor ante, non sagittis ligula cursus nec. Aliquam non placerat magna. Donec volutpat porta dictum. Phasellus vestibulum adipiscing mi, ac porttitor arcu pellentesque at. Cras tristique facilisis ligula, in pretium nulla ultricies non. Sed a nisl ipsum. Curabitur quis lorem dignissim tellus rhoncus euismod. Vivamus vitae lectus metus. Nullam lobortis, augue id aliquam congue, nisi tortor suscipit lorem, mattis scelerisque arcu velit vitae eros. In accumsan mi eget ipsum gravida elementum. Nullam dictum, orci at elementum mollis, mauris diam gravida est, at sodales diam nisl a lacus. Proin est neque, viverra sit amet lobortis posuere, elementum in dui. Suspendisse ultrices arcu et enim accumsan in commodo metus tempus. Fusce cursus bibendum sagittis. Etiam purus libero, malesuada et pretium in, fringilla et nisi.
+
+Mauris convallis posuere aliquam. Sed quam erat, aliquam vel consectetur non, vulputate quis eros. Morbi accumsan, ante luctus euismod ornare, libero neque accumsan sapien, in tincidunt justo metus quis dui. Morbi vitae nunc tellus, non placerat massa. Donec pellentesque porta est, fermentum vulputate massa elementum vel. Ut gravida hendrerit neque sit amet mattis. Nam ultrices felis vel nisl blandit facilisis. Curabitur vitae enim mi. Duis lacinia consectetur libero sit amet egestas. Aliquam eget nunc ligula, eget viverra metus.
+
+Donec dignissim semper arcu ac fermentum. Praesent suscipit nibh at mi malesuada a congue turpis pharetra. Nulla dui ipsum, rutrum nec lacinia sed, molestie cursus magna. Praesent urna leo, fermentum nec sodales a, ultrices et mauris. Cras non ante vitae leo tristique rhoncus. Proin mollis adipiscing ligula vel viverra. Duis suscipit euismod est sit amet iaculis. Nunc at diam justo, vitae elementum lectus. Sed vel augue vehicula lectus vulputate scelerisque. Fusce nec mauris nisl. Ut pellentesque augue vel dui adipiscing eget vestibulum justo posuere. Ut fringilla diam in massa commodo vitae pretium urna dapibus. Phasellus eu purus quis eros hendrerit vestibulum at vel nulla. Donec dolor tellus, eleifend sed sagittis a, pharetra eu elit. Nulla nec euismod massa.
+
+Integer imperdiet leo in lorem posuere at vulputate diam tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce feugiat mi sed tellus malesuada pharetra. In hac habitasse platea dictumst. Nullam placerat nisi vel tellus mollis eu dictum nisi auctor. Aliquam tincidunt imperdiet lorem sit amet mattis. Cras pharetra, justo at euismod ultrices, quam mi porttitor urna, nec consectetur libero magna ut nisi. Mauris ac est neque, egestas luctus enim. Morbi quis velit tellus. Duis sed ligula nec mi hendrerit convallis ut eget turpis. Nullam nunc eros, scelerisque varius aliquet nec, eleifend luctus lorem. Etiam interdum bibendum sapien nec sagittis. Curabitur sit amet metus nisl. Praesent porta mattis orci, sed fringilla nisl malesuada sed. Duis ut tortor arcu.
+
+However, sometimes you need more room for a table.
+\begin{fullwidthtable}
+\begin{tabularx}{\linewidth}{XX}
+\toprule
+Heading & Heading \\
+\midrule
+Data & Data \\
+Data & Data \\
+\bottomrule
+\end{tabularx}
+\caption{Here is a long table.}
+\end{fullwidthtable}
+
+
+
+\end{document}
