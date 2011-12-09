@@ -1,5 +1,6 @@
 \documentclass[nofonts]{dgleich-article}
 \usepackage{dgleich-math}
+
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage[square]{rnatbib}
@@ -21,8 +22,13 @@
 \section{Notation}
 
 \begin{marginfigure}
-\caption{Test, what happens with really long captions here?  Why don't I get equal
-weird hboxes and that jazz?} 
+\centering
+\rule{1in}{1in}
+
+%\caption{Test, what happens with really long captions here?  Why don't I get equal
+%weird hboxes and that jazz?} 
+\caption{Test other text in case that helps me figure out what is generating
+the small hbox.  It seems like I get them for each wrapped line.}
 \end{marginfigure}
 
 
@@ -48,7 +54,7 @@ on its diagonal.  Finally, for a subset of vertices $S \subseteq V$, let
 \]
 
 In what follows, we will be concerned with other matrices that arise
-in graph analysis and show their relationships.
+in graph analysis and show their relationships. \footnote{FIGURE 1 -- Test, what happens with a long caption?}
 
 \section{The matrices}
 
@@ -178,7 +184,7 @@ should be included in this table.
  % Laplacian computation and the normalized modularity.}
 \caption{mmarize all of these relationships in by showing the symmetric form
 of each problem and the Markov chain form of each problem.  Note th}
- \begin{tabularx}{\linewidth}{XlXX}
+ \begin{tabularx}{\linewidth}{XllX}
   \toprule
    matrix & definition & spectrum target & Markov chain problem\\
   \midrule

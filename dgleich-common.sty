@@ -64,6 +64,8 @@
 \RequirePackage{xcolor}
 \RequirePackage{textcomp}
 
+\RequirePackage{dgleich-setup}
+
 
 \newboolean{@dgleich@longtitle}
 \DeclareOption{longtitle}{\setboolean{@dgleich@longtitle}{true}}
@@ -126,17 +128,12 @@
 \renewcommand{\figurename}{FIGURE}
 \renewcommand{\tablename}{TABLE}
 
-\colorlet{TufteRed}{red!80!black}
-
-\newcommand{\email}[1]{\textsf{#1}}
-\newcommand{\acro}[1]{\textsc{\MakeTextLowercase{#1}}}
-
 % Setup CAPTIONS
 \RequirePackage{caption}
 \ifthenelse{\boolean{@dgleich@sanssmallcaps}}{%
-  \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,sc,scriptsize}}%
+  \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,sc,scriptsize},justification=RaggedRight}%
 }{%
-  \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,scriptsize}}%
+  \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,scriptsize},justification=RaggedRight}%
 }
 %\usepackage{amssymb}
 \RequirePackage{xkeyval,tkz-graph,varwidth}
@@ -150,32 +147,6 @@
 \setdefaultitem{\textperiodcentered}{\textendash}{\textopenbullet}{\textasteriskcentered}
 \setdefaultleftmargin{3em}{2em}{1em}{1em}{1em}{1em}
 
-% Setup columns
-\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
-\newcolumntype{L}[1]{>{\PreserveBackslash\RaggedRight}m{#1}}
-\newcolumntype{M}[1]{>{\PreserveBackslash\RaggedRight}p{#1}}
-\newcolumntype{R}[1]{>{\PreserveBackslash\RaggedLeft}m{#1}}
-\newcolumntype{S}[1]{>{\PreserveBackslash\RaggedLeft}p{#1}}
-\newcolumntype{Z}[1]{>{\PreserveBackslash\Centering}m{#1}}
-\newcolumntype{A}[1]{>{\PreserveBackslash\Centering}p{#1}}
-
-
-\newcolumntype{U}{>{\setlength{\RaggedRightParindent}{0pt}\RaggedRight\arraybackslash\noindent}X}
-\newcolumntype{V}{>{\RaggedLeft\arraybackslash}X}
-\newcolumntype{W}{>{\Centering\arraybackslash}X}
-
-%\newcolumntype{H}{>{\fontseries{b}\selectfont%
-  %\columncolor{shadecolor}[6pt][0pt]}l}
-%\newcolumntype{I}{>{\fontseries{b}\selectfont%
-  %\columncolor{shadecolor}[6pt][0pt]}c}
-%\newcolumntype{J}{>{\fontseries{b}\selectfont%
-  %\columncolor{shadecolor}[6pt][0pt]}r}
-%\newcommand{\hdcell}[2]{%
-  %\multicolumn{1}{#1@{}}{%
-    %\raisebox{.1mm}{%
-      %#2%
-    %}\rule{0pt}{4mm}}
-%}
 
 
 \newlength{\@suthesis@fullwidth}%
@@ -280,9 +251,5 @@
 \vspace{1ex}%
 }
 }
-
-% figure paths
-\graphicspath{{.}{./figures/}}
-
 
 \endinput 

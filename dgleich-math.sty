@@ -21,6 +21,9 @@
 % the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 % Boston, MA 02111-1307, USA.
 
+%% History
+
+
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 
 \ProvidesClass{dgleich-math}[2010/08/02 v0.1 dgleich-math class]
@@ -160,7 +163,7 @@
 \DeclarePairedDelimiter{\BraceOf}{\{}{\}}
 \DeclarePairedDelimiter{\BracketOf}{[}{]}
 \DeclarePairedDelimiter{\ParensOf}{(}{)}
-
+\DeclarePairedDelimiter{\AngleOf}{\langle}{\rangle}
 
 \providecommand{\mat}[1]{\boldsymbol{\mathrm{#1}}}%
 \renewcommand{\vec}[1]{\boldsymbol{\mathrm{#1}}}
@@ -203,10 +206,11 @@
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\Bias}{Bias}
 \DeclareMathOperator{\sign}{sign}
-\DeclareMathOperator{\Std}{SD}
+\DeclareMathOperator{\Std}{Std}
 \providecommand{\Eof}{\E\BracketOf}
 \providecommand{\hugeEof}{\hugeE\BracketOf}
 \providecommand{\Stdof}{\Std\BracketOf}
+\providecommand{\varof}{\Std\BracketOf}
 %\providecommand{\Covof}[2]{\Cov\BrackeOf#1,#2\right]}
 \providecommand{\prob}[1][]{\p_{#1}\BraceOf}
 \providecommand{\hugeprob}[1][]{\hugep_{#1}\BraceOf}

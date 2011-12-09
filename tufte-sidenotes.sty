@@ -84,6 +84,9 @@
 \setlength{\@tufte@caption@fill}{\textwidth}
 \addtolength{\@tufte@caption@fill}{\marginparsep}
 
+\newenvironment{fullwidth}{\begin{adjustwidth}{}{-\@tufte@overhang}}%
+    {\end{adjustwidth}}
+
 
 \RequirePackage{optparams}% for our new sidenote commands -- provides multiple optional arguments for commands
 
@@ -250,10 +253,10 @@
   {\FloatBarrier% process all floats before this point so the figure/table numbers stay in order.
   \begin{lrbox}{\@tufte@margin@floatbox}%
   \begin{minipage}{\marginparwidth}%
-    \@tufte@marginfont%
+    \hbox{}\vspace*{#1}%
     \captionsetup{type=#2}%
     \def\@captype{#2}%
-    \hbox{}\vspace*{#1}%
+    \@tufte@marginfont%
     \@tufte@justification%
     \@tufte@margin@par%
     \noindent\ignorespaces%
@@ -261,7 +264,6 @@
   {\end{minipage}%
   \end{lrbox}%
   \marginpar{\usebox{\@tufte@margin@floatbox}}%
-  \@tufte@reset@par%
   }
   
 %%
