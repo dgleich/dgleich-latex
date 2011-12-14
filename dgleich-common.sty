@@ -32,6 +32,7 @@
 %% Add option for cleveref
 %% Add option for algorithmic environment
 %% Add option for nicer spacing ala Tufte (14pt baseline skip)
+%% Add option for lato
 
 
 %%
@@ -44,6 +45,8 @@
 \RequirePackage{microtype}
 \RequirePackage{paralist}
 \RequirePackage{listings}
+\RequirePackage{fancyhdr}
+\RequirePackage{lscape}
 \newboolean{@dgleich@changepage}
 \IfFileExists{changepage.sty}{%
   \RequirePackage[strict]{changepage}
@@ -66,6 +69,10 @@
 
 \RequirePackage{dgleich-setup}
 
+\newboolean{@dgleich@pagegeometry}
+\setboolean{@dgleich@pagegeometry}{true}
+\DeclareOption{pagegeometry}{\setboolean{@dgleich@pagegeometry}{true}}
+\DeclareOption{nopagegeometry}{\setboolean{@dgleich@pagegeometry}{false}}
 
 \newboolean{@dgleich@longtitle}
 \DeclareOption{longtitle}{\setboolean{@dgleich@longtitle}{true}}
@@ -90,8 +97,12 @@
 
 
 % Setup page geometry
+\ifthenelse{\boolean{@dgleich@pagegeometry}}{%
 \geometry{letterpaper,textwidth=350pt,textheight=680pt,tmargin=60pt,
             left=72pt,footskip=24pt,headsep=18pt,headheight=14pt}
+}{%
+}
+
 \ifthenelse{\boolean{@dgleich@sidenotes}}{%
   \geometry{marginparwidth=144pt,left=48pt,marginparsep=18pt,tmargin=48pt}%
   \RequirePackage{tufte-sidenotes}%
@@ -110,12 +121,11 @@
   \RequirePackage[scaled=0.8]{helvet}%
   \RequirePackage[scaled=0.75]{beramono}%
   \setboolean{@dgleich@sanssmallcaps}{true}
+
 }{
-  % Setup computer modern property
-  \RequirePackage{ae}
-  % setup latin modern fonts for typewriter
-  \renewcommand{\ttdefault}{lmtt}
-  \renewcommand{\sfdefault}{lmss}
+  % Setup latin modern property
+  \RequirePackage[lighttt]{lmodern}
+  \usepackage{amssymb}
 }
 }
 
@@ -135,7 +145,6 @@
 }{%
   \captionsetup{labelsep=endash,font={footnotesize},labelfont={sf,scriptsize},justification=RaggedRight}%
 }
-%\usepackage{amssymb}
 \RequirePackage{xkeyval,tkz-graph,varwidth}
   \usetikzlibrary{arrows,shapes}
     \newcommand{\BlankVertexStyle}{%
@@ -149,19 +158,35 @@
 
 
 
-\newlength{\@suthesis@fullwidth}%
-\setlength{\@suthesis@fullwidth}{\textwidth}%
-\addtolength{\@suthesis@fullwidth}{\marginparsep}%
-\addtolength{\@suthesis@fullwidth}{\marginparwidth}%
-\newlength{\@suthesis@overhang}%
-\setlength{\@suthesis@overhang}{\marginparwidth}%
-\addtolength{\@suthesis@overhang}{\marginparsep}%
+\newlength{\@dgleich@fullwidth}%
+\setlength{\@dgleich@fullwidth}{\textwidth}%
+\addtolength{\@dgleich@fullwidth}{\marginparsep}%
+\addtolength{\@dgleich@fullwidth}{\marginparwidth}%
+\newlength{\@dgleich@overhang}%
+\setlength{\@dgleich@overhang}{\marginparwidth}%
+\addtolength{\@dgleich@overhang}{\marginparsep}%
+\newlength{\fullwidthoffset}
+\setlength{\fullwidthoffset}{\@dgleich@overhang}
 
 %\renewenvironment{fullwidth}
     %{\begin{adjustwidth}[]{}{-\@suthesis@overhang}}
     %{\end{adjustwidth}}
-\newenvironment{fullwidth}{\begin{adjustwidth}{}{-\@suthesis@overhang}}%
-    {\end{adjustwidth}}
+\@ifundefined{fullwidth}{%
+  \newenvironment{fullwidth}{\begin{adjustwidth}{}{-\@dgleich@overhang}}%
+    {\end{adjustwidth}}%
+}{}
+
+
+\newenvironment{fullwidthlscape}%
+  {\fancyhfoffset[RO]{0pt}\changetext{0pt}{\@dgleich@overhang}{}{}{}\begin{landscape}}
+  {\end{landscape}\changetext{0pt}{-\@dgleich@overhang}{}{}{}\fancyhfoffset[RO]{\fullwidthoffset}}
+  
+\newenvironment{fullwidthpages}%
+    {\fancyhfoffset[RO]{0pt}\changetext{0pt}{\@dgleich@overhang}{}{}{}}
+    {\changetext{0pt}{-\@dgleich@overhang}{}{}{}\fancyhfoffset[RO]{\fullwidthoffset}}
+
+
+
 
 \RequirePackage{soul}%
 \sodef\allcapsspacing{\upshape}{0.15em}{0.65em}{0.6em}%
@@ -251,5 +276,27 @@
 \vspace{1ex}%
 }
 }
+
+\newcommand{\setuphyperref}{%
+  \providecolor{theblue}{RGB}{0,0,180}%
+  \RequirePackage[colorlinks,pdfdisplaydoctitle
+      ,citecolor=theblue
+      ,linkcolor=theblue
+      ,urlcolor=theblue
+      ,hyperfootnotes=false,pagebackref]{hyperref}%
+%% Configure backreference from bibliography to pages in hyperref
+\renewcommand*{\backref}[1]{}%
+\renewcommand*{\backrefalt}[4]{%
+  \ifcase ##1 %
+    No citations.%
+  \or
+    Cited on page ##2.%
+  \else
+    Cited on pages ##2.%
+  \fi
+}%
+}
+
+
 
 \endinput 

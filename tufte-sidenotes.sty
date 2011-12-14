@@ -84,8 +84,10 @@
 \setlength{\@tufte@caption@fill}{\textwidth}
 \addtolength{\@tufte@caption@fill}{\marginparsep}
 
-\newenvironment{fullwidth}{\begin{adjustwidth}{}{-\@tufte@overhang}}%
-    {\end{adjustwidth}}
+\@ifundefined{fullwidth}{%
+  \newenvironment{fullwidth}{\begin{adjustwidth}{}{-\@tufte@overhang}}%
+    {\end{adjustwidth}}%
+}{}
 
 
 \RequirePackage{optparams}% for our new sidenote commands -- provides multiple optional arguments for commands

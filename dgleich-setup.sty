@@ -45,9 +45,13 @@
 
 \ProcessOptions
 
+%% Hypenation
+\hyphenation{Page-Rank}
+
 
 %% Colors
 \colorlet{TufteRed}{red!80!black}
+\definecolor{halfgray}{gray}{0.55}
 
 
 \definecolor{subtleblue}     {rgb}{0.02,0.04,0.48}
@@ -91,7 +95,11 @@
 \newcolumntype{V}{>{\RaggedLeft\arraybackslash}X}
 \newcolumntype{W}{>{\Centering\arraybackslash}X}
 
-\newcommand{\famp}[1][\relax]{{\texorpdfstring{\protect\mbox{\fontshape\itdefault#1\textit{\&}}}{and}}}
+\@ifundefined{texorpdfstring}{%
+  \newcommand{\famp}[1][\relax]{{\protect\mbox{\fontshape\itdefault#1\textit{\&}}}{and}}%
+}{%
+  \newcommand{\famp}[1][\relax]{{\texorpdfstring{\protect\mbox{\fontshape\itdefault#1\textit{\&}}}{and}}}%
+}
 
 %\newcolumntype{H}{>{\fontseries{b}\selectfont%
   %\columncolor{shadecolor}[6pt][0pt]}l}
