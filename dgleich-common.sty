@@ -297,6 +297,20 @@
 }%
 }
 
+\newcommand{\usenatbib}{%
+\RequirePackage[square]{natbib}
+\def\citeauthoryear##1##2##3(@)(@)\@nil##4{\stepcounter{NAT@ctr}\if\relax##3\relax
+   \NAT@wrout{\arabic {NAT@ctr}}{##2}{##1}{}{##4}[##1, ##2]\else
+   \NAT@wrout{\arabic {NAT@ctr}}{##3}{##2}{##1}{##4}\fi}
+\renewcommand{\cite}{\citep}
+\setuphyperref
+\newcount{\bibcolumns}
+\bibcolumns=2
+\renewcommand{\bibpreamble}{\ifnum\bibcolumns<\tw@\relax\else\begin{multicols}{\the\bibcolumns}\fi}
+\renewcommand{\bibpostamble}{\ifnum\bibcolumns<\tw@\relax\else\end{multicols}\fi}
+\renewcommand{\bibfont}{\footnotesize}
+}
+
 
 
 \endinput 
