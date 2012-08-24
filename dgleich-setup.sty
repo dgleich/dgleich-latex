@@ -117,3 +117,29 @@
 
 % figure paths
 \graphicspath{{.}{./figures/}}
+
+\lstset{%
+  basicstyle={\lstbasicfont\footnotesize},    % use font and smaller size
+  showstringspaces=false,                     % do not emphasize spaces in strings
+  tabsize=4,                                  % number of spaces of a TAB
+  mathescape=true,escapechar=�,               % escape to latex with �...�
+  aboveskip={\abovedisplayskip},               % a bit of space above
+  belowskip={\belowdisplayskip},               % a bit of space below
+  columns=fixed,                              % nice spacing
+  xleftmargin=1cm,
+  xrightmargin=1cm,
+  %
+  % the following is for replacing some matlab relations like >= or ~=
+  % by the corresponding LaTeX symbols, which are much easier to read ...
+  literate=%
+    {~}{{$\neg$}}1 %            \neg
+    {<=}{{\tiny$\leq$}}1 %      \leq
+    {>=}{{\tiny$\geq$}}1 %      \geq
+    {~=}{{\tiny$\neq$}}1 %      \neq
+    {delta}{{\tiny$\Delta$}}1%  \Delta
+}
+\lstnewenvironment{pseudocode}{%
+  \lstset{language=python,%             % use our version of highlighting
+  }%
+}{}
+

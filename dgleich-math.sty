@@ -32,8 +32,12 @@
 
 \newboolean{@dgleich@math@mathtools}
 \setboolean{@dgleich@math@mathtools}{true}
+\newboolean{@dgleich@math@theorems}
+\setboolean{@dgleich@math@theorems}{true}
 \DeclareOption{nomathtools}{\setboolean{@dgleich@math@mathtools}{false}}
 \DeclareOption{mathtools}{\setboolean{@dgleich@math@mathtools}{true}}
+\DeclareOption{notheorems}{\setboolean{@dgleich@math@theorems}{false}}
+\DeclareOption{theorems}{\setboolean{@dgleich@math@theorems}{true}}
 \ProcessOptions
 
 \RequirePackage{amsmath}
@@ -51,29 +55,28 @@
   \RequirePackage{mathtools}%
 }{}
 
-\RequirePackage[amsmath,thmmarks]{ntheorem}
-\theoremstyle{plain}
-\theoremheaderfont{\normalfont\small\sffamily}
-%\theorempostwork{\marginnote{{\sffamily THEOREM \arabic{\theorem}}
-\newtheorem{theorem}{THEOREM}
-\newtheorem{lemma}[theorem]{LEMMA}
-\newtheorem{question}[theorem]{Question}
-\newtheorem{corollary}[theorem]{COROLLARY}
-\newtheorem{conclusion}[theorem]{Conclusion}
-\newtheorem{remark}[theorem]{REMARK}
-%\newtheorem*{remark*}{Remark}
-\newtheorem{definition}[theorem]{DEFINITION}
-\newtheorem{example}[theorem]{EXAMPLE}
-\newtheorem{problem}[theorem]{Problem}
-\newtheorem{conjecture}[theorem]{Conjecture}
-
-
-\theoremstyle{nonumberplain}
-\theoremheaderfont{\normalfont\sffamily}
-\theorembodyfont{\normalfont\upshape}
-\theoremsymbol{\ensuremath{_\blacksquare}}
-\newtheorem{proof}{Proof}
-
+\ifthenelse{\boolean{@dgleich@math@theorems}}{%
+	\RequirePackage[amsmath,thmmarks]{ntheorem}
+	\theoremstyle{plain}
+	\theoremheaderfont{\normalfont\small\sffamily}
+	\newtheorem{theorem}{THEOREM}
+	\newtheorem{lemma}[theorem]{LEMMA}
+	\newtheorem{question}[theorem]{Question}
+	\newtheorem{corollary}[theorem]{COROLLARY}
+	\newtheorem{conclusion}[theorem]{Conclusion}
+	\newtheorem{remark}[theorem]{REMARK}
+	%\newtheorem*{remark*}{Remark}
+	\newtheorem{definition}[theorem]{DEFINITION}
+	\newtheorem{example}[theorem]{EXAMPLE}
+	\newtheorem{problem}[theorem]{Problem}
+	\newtheorem{conjecture}[theorem]{Conjecture}
+	
+	\theoremstyle{nonumberplain}
+	\theoremheaderfont{\normalfont\sffamily}
+	\theorembodyfont{\normalfont\upshape}
+	\theoremsymbol{\ensuremath{_\blacksquare}}
+	\newtheorem{proof}{Proof}
+}{}
 
 
 %%
@@ -262,6 +265,7 @@
 \providecommand{\mY}{\ensuremath{\mat{Y}}}
 \providecommand{\mZ}{\ensuremath{\mat{Z}}}
 \providecommand{\mLambda}{\ensuremath{\mat{\Lambda}}}
+\providecommand{\mzero}{\ensuremath{\mat{0}}}
 
 \providecommand{\ones}{\vec{e}}
 \providecommand{\va}{\ensuremath{\vec{a}}}

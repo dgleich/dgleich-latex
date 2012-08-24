@@ -77,7 +77,14 @@ typewriter typeface.  However, computer modern lacks a native bold typewriter ty
 \textbf{Here} is an example of \textbf{BOLD} typewriter text.
 \end{quote}
 
-
-
+Here is an example of algorithmic pseudocode
+\begin{pseudocode}
+initialize $\mB_0$, and $k = 0$
+for $k=0, ...$ and while $\vx_k$ does not satisfy the conditions we want ...
+  solve for the search direction $\mB_k \vp_k = -\vg$
+  compute a line search $\alpha_k$
+  update $\vx_{k+1} = \vx_{k} + \alpha \vp_k$
+  update $\mB_{k+1}$ based on $\vx_{k+1}$
+\end{pseudocode}
 
 \end{document}

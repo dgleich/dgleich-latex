@@ -75,8 +75,11 @@
 \DeclareOption{nopagegeometry}{\setboolean{@dgleich@pagegeometry}{false}}
 
 \newboolean{@dgleich@longtitle}
-\DeclareOption{longtitle}{\setboolean{@dgleich@longtitle}{true}}
-\DeclareOption{shorttitle}{\setboolean{@dgleich@longtitle}{false}}
+\newboolean{@dgleich@simpletitle}
+\setboolean{@dgleich@simpletitle}{true}
+\DeclareOption{longtitle}{\setboolean{@dgleich@longtitle}{true}\setboolean{@dgleich@simpletitle}{false}}
+\DeclareOption{shorttitle}{\setboolean{@dgleich@longtitle}{false}\setboolean{@dgleich@simpletitle}{false}}
+\DeclareOption{simpletitle}{\setboolean{@dgleich@simpletitle}{true}}
 
 \newboolean{@dgleich@sidenotes}
 \setboolean{@dgleich@sidenotes}{true}
@@ -120,8 +123,8 @@
   \RequirePackage[minionint,openg,mathlf,mathtabular]{MinionPro}%
   \RequirePackage[scaled=0.8]{helvet}%
   \RequirePackage[scaled=0.75]{beramono}%
+  \def\lstbasicfont{\fontfamily{fvm}\selectfont}
   \setboolean{@dgleich@sanssmallcaps}{true}
-
 }{
   % Setup latin modern property
   \RequirePackage[lighttt]{lmodern}
@@ -207,14 +210,14 @@
   
 \titleformat{\section}% the `%` must be RIGHT against the }
   [block]% shape
-  {\color{TufteRed}} % format applied to label+text
+  {\bfseries} % format applied to label+text
   {\scshape\MakeTextLowercase{\thesection}}% label
   {1em}% horizontal separation between label and title body
   {\sectionformat}% before the title body
   []% after the title body
 \titleformat{\subsection}% the `%` must be RIGHT against the }
   [block]% shape
-  {\sffamily\scriptsize} % format applied to label+text
+  {\sffamily\bfseries} % format applied to label+text
   {\MakeTextUppercase{\thesubsection}}% label
   {1ex}% horizontal separation between label and title body
   {\subsectionformat}% before the title body
@@ -222,10 +225,10 @@
 \titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{0ex plus.2ex}%
 \titleformat{\paragraph}% the `%` must be RIGHT against the }
   [runin]% shape
-  {\sffamily\scriptsize} % format applied to label+text
+  {\itshape\bfseries} % format applied to label+text
   {\MakeTextUppercase{\thesubsection}}% label
   {1ex}% horizontal separation between label and title body
-  {\subsectionformat}% before the title body
+  {}% before the title body
   []% after the title body
 \titlespacing*{\paragraph}{0pt}{1\baselineskip}{1\baselineskip}  
 
@@ -277,7 +280,18 @@
 }
 }
 
-\newcommand{\setuphyperref}{%
+\ifthenelse{\boolean{@dgleich@simpletitle}}{%
+  \renewcommand{\maketitle}{%
+    \begin{flushright}%
+    \textbf{\MakeTextUppercase{\allcapsspacing{\@title}}}\bigskip\par%
+    \textit{\@author}\smallskip\par%
+    \textsf{\@date}\bigskip\bigskip\par%
+    \end{flushright}\noindent%
+  }%
+}{}% No else
+
+
+\newcommand{\usehyperref}{%
   \providecolor{theblue}{RGB}{0,0,180}%
   \RequirePackage[colorlinks,pdfdisplaydoctitle
       ,citecolor=theblue
@@ -303,7 +317,8 @@
    \NAT@wrout{\arabic {NAT@ctr}}{##2}{##1}{}{##4}[##1, ##2]\else
    \NAT@wrout{\arabic {NAT@ctr}}{##3}{##2}{##1}{##4}\fi}
 \renewcommand{\cite}{\citep}
-\setuphyperref
+\usehyperref
+\renewcommand{\usehyperref}{\relax}
 \newcount{\bibcolumns}
 \bibcolumns=2
 \renewcommand{\bibpreamble}{\ifnum\bibcolumns<\tw@\relax\else\begin{multicols}{\the\bibcolumns}\fi}
