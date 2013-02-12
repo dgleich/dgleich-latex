@@ -143,3 +143,44 @@
   }%
 }{}
 
+\lstdefinelanguage{matlabfloz}{%
+  alsoletter={...},%
+  morekeywords={%                             % keywords
+  break,case,catch,continue,elseif,else,end,for,function,global,%
+  if,otherwise,persistent,return,switch,try,while,...,ones,zeros,eye},%
+  comment=[l]\%,%                             % comments
+  morecomment=[l]...,%                        % comments
+  morestring=[m]',%                           % strings 
+}[keywords,comments,strings]%
+
+
+\lstnewenvironment{dispmcode}{%
+    \lstset{language=matlabfloz,%
+      numbers=none,frame=none,%
+      keywordstyle=\color{subtleblue},%,          % keywords
+      commentstyle=\color{thegreen},%         % comments
+      stringstyle=\color{subtleed}%             % strings
+    }%
+  }%
+  {}
+
+
+\lstnewenvironment{dispmresults}{%
+    \lstset{language=matlabfloz,%
+      numbers=none,frame=none,backgroundcolor=\color{ecru},%
+      keywordstyle=\color{theblue},%,          % keywords
+      commentstyle=\color{subtlegreen},%         % comments
+      stringstyle=\color{subtlered}%             % strings
+    }%
+  }%
+  {}
+
+\lstnewenvironment{numberedmcode}{%
+    \lstset{language=matlabfloz,%
+      numbers=left,frame=none,%
+      keywordstyle=\color{subtleblue},%,          % keywords
+      commentstyle=\color{subtlegreen},%         % comments
+      stringstyle=\color{subtlered}%             % strings
+    }%
+  }%
+  {}
