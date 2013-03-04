@@ -1,0 +1,885 @@
+%%
+%% dgleich.sty
+%% Copyright, David Gleich, 2008
+%%
+
+%% dgleich.sty implements common options for latexing my documents
+%% and is designed only to be used by me.
+
+% require LaTeX, no plain ol' tex here.
+\NeedsTeXFormat{LaTeX2e}
+% identify the package to latex
+\ProvidesPackage{dgleich}[2008/03/13 David Gleich's LaTeX package]
+
+%%
+%% Include required packages
+%%
+\RequirePackage{
+	,soul           % add underlying and font spacing
+	,array          % setup tables
+	,booktabs       % better rules
+	,supertabular   %
+	,longtable
+	,colortbl
+	,textcomp       % for extra font support
+	,url            % everyone needs good urls!
+	,graphicx       % standard graphics package
+	,ragged2e       % RaggedRight, RaggedLeft, Centering, with improved hyphenation
+	,amsmath
+	%,setspace
+	,ifpdf
+	,comment
+}
+
+%%
+%% Setup paths for graphicx
+%%
+\graphicspath{{./}{./figures/}}
+
+
+%%
+%% Define a wider range of colors, and ones that I actually use
+%%
+  
+\definecolor{subtleblue}     {rgb}{0.02,0.04,0.48}
+\definecolor{subtlered}      {rgb}{0.65,0.04,0.07} 
+\definecolor{subtlegreen}    {rgb}{0.06,0.44,0.08}
+\definecolor{subtledarkblue} {rgb}{0,.1,.6}
+\definecolor{lightsubtleblue}{rgb}{0,.4,.6}
+\definecolor{ecru}           {rgb}{1.0,.98823,.95686}	
+
+\definecolor{stanfordred}      {rgb}{0.6431,0.000,0.1137} 
+
+\definecolor{stanfordsandstone}{rgb}{0.9059,0.8196,0.6039}
+\definecolor{stanfordblue}     {rgb}{0.1451,0.5176,0.7333}
+\definecolor{stanfordgreen}    {rgb}{0.1608,0.3961,0.2863} % rgb 41/101/73
+\definecolor{stanforddarkgray} {rgb}{0.2627,0.2902,0.2667} % rgb 67/74/68
+\definecolor{stanfordlightgray}{rgb}{0.8392,0.8667,0.8275} % rgb 214/221/211
+\definecolor{stanforddarkgreen}{rgb}{0.2353,0.2118,0.1373}
+\definecolor{stanforddeepred}  {rgb}{0.6510,0.2275,0.0000}
+\definecolor{stanfordneutralkhaki}{rgb}{0.5686,    0.5333,    0.4510}
+\definecolor{stanfordbrightgreen}{rgb}{0.0039 ,   0.5137  ,  0.3725}
+\definecolor{stanfordbrightblue}{rgb}{0.1451,0.5176, 0.7333} 
+\definecolor{stanfordbrightseagreen}{rgb}{0.0000,0.5020,0.5529} % rgb 0/128/141
+\definecolor{stanfordbrightyellow}{rgb}{0.9412,0.6863,0.0000} % rgb 240/175/0
+\definecolor{stanfordbrightwine}{rgb}{0.2353,0.0667,0.0275}
+
+\definecolor{Red}{rgb}{1,0,0}
+\definecolor{Blue}{rgb}{0,0,1}
+\definecolor{Olive}{rgb}{0.41,0.55,0.13}
+\definecolor{Green}{rgb}{0,1,0}
+\definecolor{DarkGreen}{rgb}{0,0.55,0}
+\definecolor{Yellow}{rgb}{1,1,0}
+\definecolor{Cyan}{rgb}{0,1,1}
+\definecolor{Magenta}{rgb}{1,0,1}
+\definecolor{Orange}{rgb}{1,.5,0}
+\definecolor{Violet}{rgb}{.5,0,.5}
+\definecolor{Purple}{rgb}{.75,0,.25}
+\definecolor{Brown}{rgb}{.75,.5,.25}
+\definecolor{Grey}{rgb}{.5,.5,.5}
+\definecolor{Pink}{rgb}{1,0,1}
+\definecolor{DarkBrown}{rgb}{.5,.34,.16}
+\definecolor{Black}{rgb}{0,0,0}
+
+%\definecolor{stanfordred}      {cmyk}{0.0000,0.3922,0.2549,0.1333} % rgb 164/0/29
+%\definecolor{stanfordsandstone}{cmyk}{18,30,56,0} % rgb 231/209/154
+%\definecolor{stanfordblue}     {cmyk}{87,23,0,0} % rgb 37/132/187
+%\definecolor{stanfordgreen}    {cmyk}{72,0,47,43} % rgb 41/101/73
+%\definecolor{stanforddarkgray} {cmyk}{15,0,11,69} % rgb 67/74/68
+%\definecolor{stanfordlightgray}{cmyk}{6,0,6,11} % rgb 214/221/211
+%\definecolor{stanfordbrightseagreen}{cmyk}{100,0,18,18} % rgb 0/128/141
+%\definecolor{stanfordbrightyellow}{cmyk}{0.0000,0.1059,0.3922,0.0235} % rgb 240/175/0
+
+
+\definecolor{shade1}{gray}{0.5}
+\definecolor{shade2}{gray}{0.75}
+\definecolor{shade3}{gray}{0.8}
+\definecolor{shade4}{gray}{0.94}
+
+%%
+%% Define table columns
+%%
+
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{L}[1]{>{\PreserveBackslash\RaggedRight}m{#1}}
+\newcolumntype{M}[1]{>{\PreserveBackslash\RaggedRight}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\RaggedLeft}m{#1}}
+\newcolumntype{S}[1]{>{\PreserveBackslash\RaggedLeft}p{#1}}
+\newcolumntype{Z}[1]{>{\PreserveBackslash\Centering}m{#1}}
+\newcolumntype{A}[1]{>{\PreserveBackslash\Centering}p{#1}}
+
+
+\newcolumntype{U}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{V}{>{\RaggedLeft\arraybackslash}X}
+\newcolumntype{W}{>{\Centering\arraybackslash}X}
+
+\newcolumntype{H}{>{\fontseries{b}\selectfont%
+  \columncolor{shadecolor}[6pt][0pt]}l}
+\newcolumntype{I}{>{\fontseries{b}\selectfont%
+  \columncolor{shadecolor}[6pt][6pt]}c}
+\newcolumntype{J}{>{\fontseries{b}\selectfont%
+  \columncolor{shadecolor}[6pt][0pt]}r}
+\newcommand{\hdcell}[2]{%
+  \multicolumn{1}{#1@{}}{%
+    \raisebox{.1mm}{%
+      #2%
+    }\rule{0pt}{4mm}}%
+}
+
+%%
+%% Define some handy commands
+%%
+\newif\ifdgleich@nodraft
+\newcommand{\draftnote}[1]{%
+  \ifdgleich@nodraft%
+    \relax% do nothing
+  \else%
+    \marginpar{\tiny \color{subtlered} \raggedright #1}%
+  \fi}
+  
+% Define a marginnote command
+\newcommand{\marginnote}[1]{%
+  \marginpar{\begin{RaggedRight}\scriptsize\begin{singlespace}%
+  #1%
+  \end{singlespace} \end{RaggedRight}}}  
+  
+\long\def\symbolfootnote[#1]#2{\begingroup%
+\def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{\raggedright #2}\endgroup}  
+
+%% common abbreviations
+\newcommand{\MATLAB}{\textsc{Matlab}}
+\newcommand{\MATLABTM}{\textsc{Matlab}\tm}
+
+%%
+%% Define alignment macros
+%%
+
+\def\clap#1{\hbox to 0pt{\hss#1\hss}}
+\def\mathllap{\mathpalette\mathllapinternal}
+\def\mathrlap{\mathpalette\mathrlapinternal}
+\def\mathclap{\mathpalette\mathclapinternal}
+\def\mathllapinternal#1#2{%
+  \llap{$\mathsurround=0pt#1{#2}$}}
+\def\mathrlapinternal#1#2{%
+  \rlap{$\mathsurround=0pt#1{#2}$}}
+\def\mathclapinternal#1#2{%
+  \clap{$\mathsurround=0pt#1{#2}$}}
+  
+%%
+%% Add some styling commands
+%%
+\newcommand{\email}[1]{\textsf{#1}}
+\newcommand{\dataname}[1]{\textsf{#1}}
+\newcommand{\prog}[1]{\textsf{#1}}
+
+%%
+%% Declare options
+%%
+
+% minion              uses the minion font
+% shadedtableheaders  gives shaded table heads
+% matrixmath          enable all matrix math macros
+% optimizationmath    enable all optimization math macros
+% statisticsmath      enable all optimization math macros
+% matrixshorts        short cuts for many matrix calls (\mA vs. \mat{A})
+% vectorshorts        short cuts for many vector calls (\va vs. \vec{a})
+% genericmath         enable generic math macros
+% fancytitle          redefine \maketitle with a fancy title
+% simpletitle         redfine \maketitle with a simple title
+% ruledfloats
+% headings            setup nice headings
+% headfoot            setup page numbers and running header
+% nospecials          disable all special options
+%
+% Todo:
+% - finish shadedtableheaders
+% - finish ruledfloats
+% - document new column types
+%
+% Option bundles
+% beamerlight         setup commands for beamer on a light background
+% beamerdark          setup commands for beamer on a dark background
+% nicetype            enable the current ``best typography'' settings
+% mathall             all math macros
+% 
+
+% gobble up bad options
+\DeclareOption*{%
+  \PackageWarning{dgleich}{Unknown option `\CurrentOption'}%
+}
+
+%%
+%% Setup if statements for options
+%%
+
+% setup an if to determine if we use the minion font
+\newif\ifdgleich@minion
+\newif\ifdgleich@palatino
+\newif\ifdgleich@charter
+\newif\ifdgleich@gillsans
+\newif\ifdgleich@beramono
+
+\newif\ifdgleich@microtype
+
+\newif\ifdgleich@headfoot
+\newif\ifdgleich@fancytitle
+\newif\ifdgleich@hyphenation
+
+\newif\ifdgleich@amsmathenvironments
+\newif\ifdgleich@vecbf
+
+\newif\ifdgleich@tikz
+\newif\ifdgleich@tkzgraph
+\newif\ifdgleich@cleveref
+
+\newif\ifdgleich@nospecials
+\newif\ifdgleich@subfig
+\newif\ifdgleich@beamer
+
+\newif\ifdgleich@amssymb
+
+\newif\ifdgleich@listings
+\dgleich@subfigtrue
+\dgleich@amssymbtrue
+
+%%
+%% Declare option combinations, options are parsed in the order they are
+%% defined, so these need to come first so we can override them later
+%%
+
+% nospecial is an option to remove all 
+\DeclareOption{nospecial}{
+  \dgleich@nospecialstrue
+}
+
+\DeclareOption{nicetype}{%
+  \ExecuteOptions{%
+   ,headings%
+   ,hyphenation%
+   ,captions1%
+   ,lightcolors%
+   ,palatino%
+   ,extralinespacing%
+   ,headfoot%
+   ,tablecolor%
+   ,listings
+   ,microtype
+  }%
+}
+
+\DeclareOption{mathall}{%
+  \ExecuteOptions{%
+  ,genericmath%
+  ,matrixmath%
+  ,statisticsmath%
+  ,optimizationmath%
+  ,matrixshorts%
+  ,vectorshorts%
+  ,mathenvironments%
+  }%
+}
+
+\DeclareOption{beamer}{%
+  \dgleich@subfigfalse
+  \dgleich@beamertrue
+}  
+
+
+%%
+%% All the declare option commands
+%%
+
+\DeclareOption{nodraft}{\dgleich@nodrafttrue}          % set nodraft true
+
+\newcommand{\dgleich@fontfalse}{                       % declare a new command
+  \dgleich@minionfalse%                                  to set all fonts to 
+  \dgleich@palatinofalse%                                disabled
+  \dgleich@charterfalse%
+  \dgleich@gillsansfalse%
+}
+\DeclareOption{minion}{\dgleich@fontfalse\dgleich@miniontrue}            % set minion true 
+\DeclareOption{palatino}{\dgleich@fontfalse\dgleich@palatinotrue}        % set palatino true 
+\DeclareOption{charter}{\dgleich@fontfalse\dgleich@chartertrue}          % set charter true 
+\DeclareOption{gillsans}{\dgleich@gillsanstrue}                          % set gillsans true 
+\DeclareOption{nofont}{\dgleich@fontfalse}
+\DeclareOption{hyphenation}{\dgleich@hyphenationtrue}  % set hyphenation true
+\DeclareOption{hyphenation}{\dgleich@microtypetrue} % set microtype true
+
+
+% Use shaded table headings
+\DeclareOption{shadedtableheaders}{%
+}
+
+\DeclareOption{headings}{
+	\addtokomafont{sectioning}{\centering\color{subtleblue}\rmfamily}
+}  
+
+\DeclareOption{headfoot}{
+	\dgleich@headfoottrue
+}  
+
+\DeclareOption{centerheadings}{
+	\addtokomafont{section}{\centering}%
+}
+
+\DeclareOption{extralinespacing}{
+  \setstretch{1.05}
+}
+
+\DeclareOption{doublespace}{
+  \setstretch{2.0}
+}  
+
+\DeclareOption{tightbib}{
+  \providecommand{\bibextraformatting}{%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{0pt}%
+    \setlength{\itemsep}{2pt}}%
+}
+
+%% mathemathematics options
+
+\DeclareOption{gvlmatrixmath}{
+	\renewcommand{\mat}{\relax}%
+	\dgleich@vecbftrue% set vecbf true to enable after loading MnSymbol
+}  
+
+\DeclareOption{matrixmath}{
+	\providecommand{\mat}[1]{\boldsymbol{\mathrm{#1}}}%
+	\dgleich@vecbftrue% set vecbf true to enable after loading MnSymbol
+	\providecommand{\normof}[2][]{\left\| #2 \right\|_{#1}}%
+	\DeclareMathOperator{\rank}{rank}%
+  \DeclareMathOperator{\diag}{diag}%
+  \DeclareMathOperator{\Diag}{Diag}%
+  \providecommand{\itr}[2]{#1^{(#2)}}
+  \providecommand{\itn}[1]{^{(#1)}}%
+  \providecommand{\eps}{\varepsilon}%
+  \providecommand{\kron}{\otimes}
+  \DeclareMathOperator{\tvec}{vec}
+  \providecommand{\pmat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+  \providecommand{\bmat}[1]{\begin{bmatrix} #1 \end{bmatrix}}
+  \providecommand{\spmat}[1]{\left(\begin{smallmatrix} #1 \end{smallmatrix}\right)}
+  \providecommand{\sbmat}[1]{\left[\hskip -0.5\arraycolsep \begin{smallmatrix} #1 \end{smallmatrix}\hskip -0.5\arraycolsep\right]}
+}  
+
+\DeclareOption{optimizationmath}{
+  \DeclareMathOperator*{\minimize}{minimize}
+  \DeclareMathOperator*{\maximize}{maximize}
+  \DeclareMathOperator{\argmax}{argmax}
+  \DeclareMathOperator{\argmin}{argmin}
+  \providecommand{\subjectto}{\ensuremath{\text{subject to}}}
+  \providecommand{\MINof}[1][]{{\displaystyle \minimize_{#1}}}
+	\providecommand{\MIN}[2]{\begin{array}{ll} \MINof[#1] & #2 \end{array}}
+	\providecommand{\MINone}[3]{\begin{array}{ll} \MINof[#1] & #2 \\ \subjectto  & #3 \end{array}}
+	\providecommand{\MINtwo}[4]{\begin{array}{ll} \MINof[#1] & #2 \\ \subjectto  & #3 \\ & #4 \end{array}}
+	\providecommand{\MINthree}[5]{\begin{array}{ll} \MINof[#1] & #2 \\ \subjectto  & #3 \\ & #4 \\ & #5 \end{array}}
+	\providecommand{\MINfour}[6]{\begin{array}{ll} \MINof[#1] & #2 \\ \subjectto  & #3 \\ & #4 \\ & #5 \\ & #6 \end{array}}
+	\providecommand{\MAXof}[1][]{{\displaystyle \maximize_{#1}}}
+	\providecommand{\MAX}[2]{\begin{array}{ll} \MAXof[#1] & #2 \end{array}}
+	\providecommand{\MAXone}[3]{\begin{array}{ll} \MAXof[#1] & #2 \\ \subjectto & #3 \end{array}}
+	\providecommand{\MAXtwo}[4]{\begin{array}{ll} \MAXof[#1] & #2 \\ \subjectto  & #3 \\ & #4 \end{array}}
+	\providecommand{\MAXthree}[5]{\begin{array}{ll} \MAXof[#1] & #2 \\ \subjectto  & #3 \\ & #4 \\ & #5 \end{array}}
+	\providecommand{\MAXfour}[6]{\begin{array}{ll} \MAXof[#1] & #2 \\ \subjectto  & #3 \\ & #4 \\ & #5 \\ & #6 \end{array}}
+}
+
+\DeclareOption{statisticsmath}{
+  \DeclareMathOperator{\E}{E}
+	\DeclareMathOperator{\p}{\mathbb{P}}
+	\DeclareMathOperator{\Var}{Var}
+	\DeclareMathOperator{\Cov}{Cov}
+	\DeclareMathOperator{\Bias}{Bias}
+	\DeclareMathOperator{\sign}{sign}
+	\DeclareMathOperator{\Std}{Std}
+	\providecommand{\Eof}[1]{\E\left[#1\right]}
+  \providecommand{\Stdof}[1]{\Std\left[#1\right]}
+  \providecommand{\Covof}[2]{\Cov\left[#1,#2\right]}
+  \providecommand{\prob}[2][]{\p_{#1}\left[ #2 \right]}
+}
+
+\DeclareOption{genericmath}{
+	\DeclareMathOperator{\supp}{supp}
+	\providecommand{\set}{\mathcal}
+	\providecommand{\graph}{\mathcal}
+	\providecommand{\mathdef}{\equiv}
+	\providecommand{\card}[1]{\left| #1 \right|}
+	\providecommand{\cardof}[1]{\left| #1 \right|}
+	\providecommand{\eqdef}{\equiv}
+	\providecommand{\eps}{\varepsilon}
+}
+
+\DeclareOption{matrixshorts}{
+	\providecommand{\eye}{\mat{I}}
+	\providecommand{\mA}{\ensuremath{\mat{A}}}
+	\providecommand{\mB}{\ensuremath{\mat{B}}}
+	\providecommand{\mC}{\ensuremath{\mat{C}}}
+	\providecommand{\mD}{\ensuremath{\mat{D}}}
+	\providecommand{\mE}{\ensuremath{\mat{E}}}
+	\providecommand{\mF}{\ensuremath{\mat{F}}}
+	\providecommand{\mG}{\ensuremath{\mat{G}}}
+	\providecommand{\mH}{\ensuremath{\mat{H}}}
+	\providecommand{\mI}{\ensuremath{\mat{I}}}
+	\providecommand{\mJ}{\ensuremath{\mat{J}}}
+	\providecommand{\mK}{\ensuremath{\mat{K}}}
+	\providecommand{\mL}{\ensuremath{\mat{L}}}
+	\providecommand{\mM}{\ensuremath{\mat{M}}}
+	\providecommand{\mN}{\ensuremath{\mat{N}}}
+	\providecommand{\mO}{\ensuremath{\mat{O}}}
+	\providecommand{\mP}{\ensuremath{\mat{P}}}
+	\providecommand{\mQ}{\ensuremath{\mat{Q}}}
+	\providecommand{\mR}{\ensuremath{\mat{R}}}
+	\providecommand{\mS}{\ensuremath{\mat{S}}}
+	\providecommand{\mT}{\ensuremath{\mat{T}}}
+	\providecommand{\mU}{\ensuremath{\mat{U}}}
+	\providecommand{\mV}{\ensuremath{\mat{V}}}
+	\providecommand{\mW}{\ensuremath{\mat{W}}}
+	\providecommand{\mX}{\ensuremath{\mat{X}}}
+	\providecommand{\mY}{\ensuremath{\mat{Y}}}
+	\providecommand{\mZ}{\ensuremath{\mat{Z}}}
+	\providecommand{\mLambda}{\ensuremath{\mat{\Lambda}}}
+}  
+
+\DeclareOption{vectorshorts}{
+	\providecommand{\ones}{\vec{e}}
+	\providecommand{\va}{\ensuremath{\vec{a}}}
+	\providecommand{\vb}{\ensuremath{\vec{b}}}
+	\providecommand{\vc}{\ensuremath{\vec{c}}}
+	\providecommand{\vd}{\ensuremath{\vec{d}}}
+	\providecommand{\ve}{\ensuremath{\vec{e}}}
+	\providecommand{\vf}{\ensuremath{\vec{f}}}
+	\providecommand{\vg}{\ensuremath{\vec{g}}}
+	\providecommand{\vh}{\ensuremath{\vec{h}}}
+	\providecommand{\vi}{\ensuremath{\vec{i}}}
+	\providecommand{\vj}{\ensuremath{\vec{j}}}
+	\providecommand{\vk}{\ensuremath{\vec{k}}}
+	\providecommand{\vl}{\ensuremath{\vec{l}}}
+	\providecommand{\vm}{\ensuremath{\vec{l}}}
+	\providecommand{\vn}{\ensuremath{\vec{n}}}
+	\providecommand{\vo}{\ensuremath{\vec{o}}}
+	\providecommand{\vp}{\ensuremath{\vec{p}}}
+	\providecommand{\vq}{\ensuremath{\vec{q}}}
+	\providecommand{\vr}{\ensuremath{\vec{r}}}
+	\providecommand{\vs}{\ensuremath{\vec{s}}}
+	\providecommand{\vt}{\ensuremath{\vec{t}}}
+	\providecommand{\vu}{\ensuremath{\vec{u}}}
+	\providecommand{\vv}{\ensuremath{\vec{v}}}
+	\providecommand{\vw}{\ensuremath{\vec{w}}}
+	\providecommand{\vx}{\ensuremath{\vec{x}}}
+	\providecommand{\vy}{\ensuremath{\vec{y}}}
+	\providecommand{\vz}{\ensuremath{\vec{z}}}
+  \providecommand{\vpi}{\ensuremath{\vecalt{\pi}}} 
+}  
+
+\DeclareOption{mathenvironments}{
+  \dgleich@amsmathenvironmentstrue
+}
+
+% caption formatting
+\DeclareOption{captions1}{%
+  \captionsetup[figure]{format=plain,labelsep=quad,font={small},labelfont={sf,bf}}%
+  \captionsetup[subfigure]{format=plain,font={footnotesize,md,sl},labelfont={md,sf,up},}%
+\captionsetup[subfloat]{format=plain,font={footnotesize,md,sl},labelfont={md,sf,up},}%
+  \captionsetup[table]{format=plain,labelsep=quad,position=top,font={small},belowskip=10pt,labelfont={sf,bf}}%
+}
+\DeclareOption{siamreviewcaption}{%
+  \captionsetup[figure]{format=hang,font={small},labelsep=quad,labelfont={sf,bf}}%
+  \captionsetup[subfigure]{font={footnotesize,md,sl},labelfont={md,sf,up}}%
+  \captionsetup[table]{position=top,font={small},belowskip=10pt,labelfont={sf,bf}}%
+}
+
+%%
+%% setup options for color schemes
+%% 
+\DeclareOption{lightcolors}{
+  \definecolor{theblue}{named}{subtleblue}
+  \definecolor{thered}{named}{subtlered}
+  \definecolor{thegreen}{named}{subtlegreen}
+  \definecolor{theshade}{named}{shade4}
+  \definecolor{thegray}{named}{shade1}
+  \definecolor{theframe}{named}{shade2}
+}
+\DeclareOption{StanfordColors}{
+  \definecolor{theblue}{named}{stanfordblue}
+  \definecolor{thered}{named}{stanfordred}
+  \definecolor{thegreen}{named}{stanfordgreen}
+  \definecolor{theshade}{named}{stanfordlightgray}
+  \definecolor{theframe}{named}{stanforddarkgray}
+  \definecolor{thegray}{named}{stanforddarkgray}
+}  
+
+%% tables
+\providecommand{\tabularheadstyle}{}
+\providecommand{\tabularheadrow}{}
+\providecommand{\tabularheadcell}{}
+\providecommand{\tabularheadend}{}
+\providecommand{\tabularbodystyle}{}
+\providecommand{\tabularbodyend}{}
+\providecommand{\tabularend}{}
+\DeclareOption{tablecolor}{
+  \renewcommand{\tabularheadrow}{\rowcolor{theframe}}
+  \renewcommand{\tabularheadcell}{\cellcolor{theframe}}
+  \renewcommand{\tabularheadend}{\addlinespace}
+  \renewcommand{\tabularend}{\midrule}
+}
+\DeclareOption{tablelines}{
+  \renewcommand{\tabularheadrow}{}
+  \renewcommand{\tabularheadcell}{}
+  \renewcommand{\tabularheadend}{}
+  \renewcommand{\tabularend}{}
+	\renewcommand{\tabularheadstyle}{\toprule}
+  \renewcommand{\tabularheadend}{\midrule}
+  \renewcommand{\tabularend}{\bottomrule}
+}  
+
+%% Titles
+
+\DeclareOption{simpletitle}{
+	\renewcommand*\titlefont{\sffamily\bfseries}%
+	\newcommand*\titleauthorfont{\sffamily}%
+	\newcommand*\titledatefont{\sffamily}%
+	\renewcommand{\maketitle}{{%
+				\begin{center}%
+	           \titlefont  \bfseries \Large \@title \par%
+	        \end{center}%
+	        \begin{center} \titleauthorfont \large \begin{tabular}[t]{c}%
+	           \@author \par%
+	        \end{tabular}\end{center}%
+	        \begin{center}%
+	        \titledatefont \@date%\par%
+	        \end{center}%
+	\setcounter{footnote}{0}%
+	\thispagestyle{plain}%
+}}}
+
+\DeclareOption{fancytitle}{
+	\renewcommand{\maketitle}{{%
+			  \begin{raggedright}
+           \sffamily \bfseries \Large \@title \par \medskip
+        \end{raggedright}
+        \begin{raggedright}
+        	\sffamily \@extratitle \par
+        \end{raggedright}
+        \rule{0.95\linewidth}{0.5pt}
+        \begin{raggedleft}
+           \small \@author \par \bigskip
+        \end{raggedleft}
+        {\ifx\@publishers\@empty\else\begin{raggedleft}\small\@publishers\par\bigskip\end{raggedleft}\fi}
+        \begin{raggedleft}
+             \scshape {\footnotesize \@date} \par \medskip
+        \end{raggedleft}
+\setcounter{footnote}{0}
+\thispagestyle{plain}
+}}}
+
+\DeclareOption{tightspacing}{%
+  \renewcommand\normalsize{%
+    \@setfontsize\normalsize\@xpt\@xiipt%
+    \abovedisplayskip 5\p@ \@plus2\p@ \@minus5\p@%
+    \abovedisplayshortskip \z@ \@plus3\p@%
+    \belowdisplayshortskip 3\p@ \@plus3\p@ \@minus3\p@%
+    \belowdisplayskip \abovedisplayskip%
+    \let\@listi\@listI}%
+}
+
+%% pgf/tikz/tkzberge options
+\DeclareOption{tikz}{%
+  \dgleich@tikztrue
+}
+\DeclareOption{tkzberge}{%
+	\dgleich@tikztrue
+  \dgleich@tkzgraphtrue
+}
+\DeclareOption{tkzgraph}{%
+  \dgleich@tikztrue
+  \dgleich@tkzgraphtrue
+}
+
+
+\DeclareOption{cleveref}{%
+	\dgleich@clevereftrue
+}
+
+%%
+\DeclareOption{listings}{
+  \dgleich@listingstrue
+}  
+
+%%
+%% Actually run through and process the options
+%%
+\ExecuteOptions{lightcolors}
+\ProcessOptions\relax
+
+%%
+%% include subfig code
+%%
+
+\ifdgleich@subfig
+  \RequirePackage{subfig}
+	%%
+	%% fix a huge bug in subfig
+	%%
+	\newbox\sf@box
+	\newenvironment{SubFloat}[2][]%
+	  {\def\sf@one{#1}%
+	   \def\sf@two{#2}%
+	   \setbox\sf@box\hbox
+	     \bgroup}%
+	  {  \egroup
+	   \ifx\@empty\sf@two\@empty\relax
+	     \def\sf@two{\@empty}
+	   \fi
+	   \ifx\@empty\sf@one\@empty\relax
+	     \subfloat[\sf@two]{ \box\sf@box }%
+	   \else
+	     \subfloat[\sf@one][\sf@two]{\box\sf@box}%
+	   \fi}
+\else
+\fi	  
+
+
+%%
+%% include the ifxetex.sty code
+%%
+% Create, if necessary, the \ifxetex conditional
+\newif\ifdgleich@xetex
+
+% Set \ifxetex accordingly
+\expandafter\ifx\csname XeTeXrevision\endcsname\relax
+  \dgleich@xetexfalse
+\else
+  \dgleich@xetextrue
+\fi
+
+%% 
+%% get all the special options
+%%
+
+\ifdgleich@nospecials
+	\dgleich@tikzfalse
+	\dgleich@tkzgraphefalse
+  \dgleich@fontfalse
+  \providecommand{\np}[1]{#1}
+\else 
+  \RequirePackage[np,autolanguage]{numprint} % get commas, decimals
+  \RequirePackage{
+		,stackrel
+	}	
+	\ifdgleich@xetex%
+		\RequirePackage{fontspec}%
+	\fi
+\fi  
+
+% Define a marginnote command
+%\ifdgleich@nospecials
+%	\newcommand{\marginnote}[1]{%
+%		\marginpar{\begin{flushleft}\scriptsize\begin{singlespace}%
+% 		#1%
+% 		\end{singlespace} \end{flushleft}}}  
+%\else
+%  \newcommand{\marginnote}[1]{%
+%		\marginpar{\begin{RaggedRight}\scriptsize\begin{singlespace}%
+% 		#1%
+% 		\end{singlespace} \end{RaggedRight}}} 
+%\fi 			
+  		
+  	
+
+%%
+%% now handle all the ifs set by the options
+%%
+
+%% handle font ifs
+\newif\ifdgleich@boldtt
+\newif\ifdgleich@sansloaded
+\dgleich@boldtttrue
+
+\ifdgleich@gillsans
+  \ifdgleich@xetex
+    \setsansfont{Gill Sans MT}
+    \dgleich@sansloadedtrue
+  \else
+    \ifpdf
+    	\RequirePackage{GillSans}
+    	\dgleich@sansloadedtrue
+    \fi
+  \fi
+\fi 
+
+\ifdgleich@minion%
+  \ifdgleich@xetex
+  	\setmainfont{Minion Pro}
+  	\RequirePackage{amssymb}
+  \else
+	  \RequirePackage[T1]{fontenc}%
+	  \RequirePackage[latin1]{inputenc}%
+	  \ifdgleich@sansloaded
+	  	\relax
+ 		\else
+	  	\RequirePackage{lmodern}% lmodern includes boldtt
+	  	\dgleich@boldttfalse
+	  \fi
+	  \RequirePackage[minionint,openg,mathlf]{MinionPro}%
+    \dgleich@amssymbfalse% 
+  \fi
+\fi  
+
+
+\ifdgleich@palatino%
+  \ifdgleich@xetex
+    \setmainfont{Palatino Linotype}
+  \else
+  	\dgleich@boldttfalse
+	  \RequirePackage[latin1]{inputenc}%
+	  \RequirePackage[T1]{fontenc}%
+	  \ifdgleich@sansloaded
+	  	\relax
+ 		\else
+	  	\RequirePackage{lmodern}% lmodern includes boldtt
+	  	\dgleich@boldttfalse
+	  \fi
+	  \RequirePackage[sc,osf]{mathpazo}%
+	  \linespread{1.05} 
+	  %\RequirePackage[stretch=15,shrink=15,step=3,expansion=false]{microtype}%
+	\fi
+\fi  
+
+\ifdgleich@charter%
+  \RequirePackage[latin1]{inputenc}%
+  %\dgleich@boldtttrue
+  \RequirePackage[T1]{fontenc}%
+  \ifdgleich@sansloaded
+  	\relax
+ 	\else
+	  \RequirePackage{lmodern}% lmodern includes boldtt
+	\fi
+  \RequirePackage[charter]{mathdesign}%
+  %\RequirePackage[stretch=15,shrink=15,step=3,expansion=false]{microtype}%
+\fi
+
+\ifdgleich@beramono%
+  \RequirePackage{fix-cm}%
+  \RequirePackage[T1]{fontenc}%
+  \RequirePackage[scaled=0.8]{beramono}%
+  \dgleich@boldttfalse
+\fi  
+
+% add comm
+\ifdgleich@boldtt
+  \RequirePackage{bold-extra}%
+\fi  
+
+%%
+%% Headings
+%%
+\ifdgleich@headfoot
+  \RequirePackage{scrpage2}
+	\pagestyle{scrheadings}
+	\if@twoside % if two sided layout 
+		\clearscrheadfoot
+		\manualmark
+		\ohead{\pagemark}
+	  \ifdgleich@nodraft
+	  	\relax
+	  \else
+	    \cfoot[\pagemark]{Draft from \today}
+	    \ofoot[Draft from \today]{}
+	  \fi
+	  \providecommand{\runningtitle}{\markleft}
+	  \providecommand{\authorshead}{\markright}
+	  \rehead{\leftmark}
+	  \lohead{\rightmark}
+  \else
+    \ifdgleich@nodraft
+	  	\relax
+	  \else
+	    \ifoot{Draft from \today}
+	  \fi
+	  \providecommand{\runningtitle}{\markleft}
+	  \providecommand{\authorshead}{\markright}
+	  \ihead{\leftmark}
+	  \ohead{\rightmark}
+	  \chead{}
+	\fi
+\fi
+    
+
+
+%%
+%% List of hyphenation commands
+%%
+\ifdgleich@hyphenation%
+  \hyphenation{Page-Rank}
+\fi
+
+%%
+%% Math environments
+%%
+\ifdgleich@amsmathenvironments
+  \RequirePackage{amsthm}
+  \newtheorem{question}{Question}
+  \newtheorem{theorem}{Theorem}
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{corollary}[theorem]{Corollary}
+  \newtheorem{conclusion}[theorem]{Conclusion}
+  \newtheorem{remark}[theorem]{Remark}
+  \newtheorem*{remark*}{Remark}
+  \newtheorem{algorithm}{Algorithm}
+  \newtheorem{definition}{Definition}
+  \newtheorem{example}{Example}
+  \newtheorem{problem}{Problem}
+\fi
+
+\ifdgleich@vecbf
+  \renewcommand{\vec}[1]{\boldsymbol{\mathrm{#1}}}%
+\fi   
+
+%% pgf/tikz/tkzberge
+\ifdgleich@tikz
+  \RequirePackage{tikz}
+\else
+  \excludecomment{tikzpicture}
+\fi
+
+\ifdgleich@tkzgraph
+  \RequirePackage{xkeyval,tkz-graph,varwidth}
+  \usetikzlibrary{arrows,shapes}
+  \newenvironment{smallgraph}[1][\columnwidth]{%
+  	\hspace{1em}\begin{varwidth}{#1}%
+\begin{tikzpicture}%
+  	\scriptsize%
+  	\tikzstyle{NormalVertexStyle}=[shape=circle,minimum size = 8pt,draw]%
+	}{%
+  	\end{tikzpicture}\end{varwidth}\hspace{1em}%
+	}
+	\newcommand{\BlankVertexStyle}{%
+		\tikzstyle{NormalVertexStyle}=[minimum size=8pt,shape=circle]%
+	}
+\else
+  \excludecomment{smallgraph}
+\fi
+
+
+\ifdgleich@listings
+  \RequirePackage{listings}
+\fi  
+
+\ifdgleich@amssymb
+  \RequirePackage{amssymb}
+\fi
+  
+\ifdgleich@cleveref
+  \RequirePackage{cleveref}  
+  \crefname{subfigure}{figure}{figures}
+  \crefname{figure}{figure}{figures}
+  \crefname{equation}{equation}{equations}
+  \crefname{table}{table}{tables}
+\fi  
+
+\ifdgleich@microtype%
+  \ifpdf%
+    \RequirePackage[stretch=15,shrink=15,step=3,expansion=false]{microtype}%
+  \fi%
+\fi  
+
+
+\endinput

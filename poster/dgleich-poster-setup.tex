@@ -1,0 +1,183 @@
+% language
+\usepackage[english]{babel}
+
+% setup fonts
+%\usepackage{GillSans}
+\usepackage[scaled=0.85]{helvet}
+\usefonttheme{professionalfonts}
+\usepackage[scaled=0.8]{beramono}
+\usepackage{arev}
+\usepackage{fix-cm}
+\usepackage[T1]{fontenc}
+
+% packages
+\usepackage{varwidth}
+\usepackage{algorithmic}
+\usepackage{rotating}
+\let\Tiny=\tiny
+\usepackage[beamer,matrixmath,matrixshorts,vectorshorts,statisticsmath,genericmath,tkzberge]{dgleich}
+\graphicspath{{./}{./figures/}{./code/}}
+\usepackage{microtype}
+\usepackage{textcase}
+\usepackage{tabularx}
+\usepackage[absolute,overlay]{textpos}
+\usepackage[texcoord]{eso-pic}
+
+
+
+% display agnostic commands
+
+% use a fancysans 
+% \newcommand{\fancysansfamily}{GillSans-TLF}
+% \newcommand{\fancysans}{\usefont{T1}{GillSans-TLF}{m}{n}}
+% \newcommand{\fancysanstext}[1]{{\fancysans #1}}
+% \newcommand{\fancysanstextit}[1]{{\usefont{T1}{GillSans-TLF}{m}{it} #1}}
+
+% use Helvetica
+\newcommand{\fancysansfamily}{phv}
+\newcommand{\fancysans}{\usefont{T1}{phv}{m}{n}}
+\newcommand{\fancysanstext}[1]{{\fancysans #1}}
+\newcommand{\fancysanstextit}[1]{{\usefont{T1}{GillSans-TLF}{m}{it} #1}}
+
+% define a command for fancy text fractions if the font supports it
+\newcommand{\textfrac}[1]{#1}
+
+% change the margins
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+%adjust the TPHorizModule and TPHorizModule units to the displayed mm %grid
+%\TPGrid[0mm,0mm]{100}{100}
+
+%puts a graphic at the absolute position described by the grid
+%#1 x, #2 y, #3 , #4 graphic
+\newcommand\putpic[4][]{%
+        \begin{textblock}{0}(#2,#3)%
+  \begin{picture}(0,0)(0,0)\includegraphics[#1]{#4}\end{picture}%
+     \end{textblock}%
+} 
+\newcommand{\putat}[3]{%
+\begin{textblock}{0}(#1,#2)%
+\begin{picture}(0,0)(0,0){#3}\end{picture}%
+\end{textblock}}%
+
+
+
+
+%%
+%% SETUP the slide appearance
+%% These commands are often nasty, we begin by defining a set of colors
+%% then the next include actually specifies all the beamer layout commands.
+%%
+
+% Colors
+\definecolor{accentlight}     {RGB}{31,73,125}
+\definecolor{accentheavy}      {RGB}{153,0,0}
+\definecolor{shadelight}{RGB}{142,180,227} % light blue
+%\definecolor{shadeheavy}{RGB}{203,203,203}
+\definecolor{shadeheavy}{RGB}{196,189,151}
+\colorlet{shadelight}{shadeheavy!50!white}
+\definecolor{backgroundaccent}{RGB}{196,189,151}
+\definecolor{background}{RGB}{238,236,225}
+\definecolor{neutralshade}{gray}{0.85}  
+
+% derived colors
+\colorlet{shadecolor}{neutralshade}
+\colorlet{lighttextcolor}{shadecolor!50!black}
+\colorlet{boxshade}{backgroundaccent}
+\colorlet{boxframe}{backgroundaccent}
+
+\usetheme{GleichPosterPaloAlto}
+
+% setup Poster
+\usepackage[orientation=landscape,size=a0,scale=1.1]{beamerposter}       
+
+% setup pieces on top of the poster.
+
+
+% Poster columns
+% fix spacing in the columns
+\makeatletter
+\newcommand{\defaultmetrics}{%
+% Setup parskip (just ripped from parskip.sty)
+\parskip=0.5\baselineskip \advance\parskip by 0pt plus 2pt%
+\parindent=\z@%
+\def\@listI{\leftmargin\leftmargini%
+   \partopsep\z@% added by G. Partosch
+   \topsep\z@ \parsep\parskip \itemsep\z@}%
+\let\@listi\@listI%
+\@listi%
+\def\@listii{\leftmargin\leftmarginii%
+   \labelwidth\leftmarginii\advance\labelwidth-\labelsep%
+   \partopsep\z@% added by G. Partosch
+   \topsep\z@ \parsep\parskip \itemsep\z@}%
+\def\@listiii{\leftmargin\leftmarginiii%
+    \labelwidth\leftmarginiii\advance\labelwidth-\labelsep%
+    \partopsep\z@% added by G. Partosch
+    \topsep\z@ \parsep\parskip \itemsep\z@}%
+\justifying% Make everything Justified    
+}
+\newcommand{\postercolumn}[2][t]{%
+  \column[#1]{#2}%
+  \normalsize\defaultmetrics\ignorespaces%
+}
+\makeatother
+
+
+%% 
+%% Display specific commands.  
+%%
+
+\newcommand{\reftext}[1]{\fancysanstextit{\textcolor{accentlight}{#1}}}
+
+\newcommand{\noterlap}[1]{\rlap{\color{lighttextcolor}#1}}
+
+\newcommand{\plotbox}[1]{%
+  \setlength\fboxrule{1pt}\fcolorbox{boxframe}{boxshade}{#1}%
+}  
+\newcommand{\cplotbox}[1]{%
+  \begin{center}\setlength\fboxrule{1pt}\fcolorbox{boxframe}{boxshade}{#1}\end{center}%
+}  
+\newcommand{\mathbox}[2][0.8]{%
+  \begin{center}%
+    \setlength\fboxrule{1pt}\fcolorbox{boxframe}{boxshade}{%
+    \begin{beamercolorbox}[sep=1em,wd=#1\linewidth]{mybox}%
+    #2%
+    \end{beamercolorbox}%
+    }%
+  \end{center}%
+}
+
+\newcommand{\deemph}[1]{%
+  {\itshape\color{lighttextcolor}%
+  #1%
+ }
+}
+
+\newcommand{\captext}[1]{%
+ {\scriptsize\deemph{#1}}%
+}
+
+
+\newenvironment{highlight}[1][1ex]{%
+  \begin{list}{}{%
+    \setlength{\topsep}{1ex}%
+    \setlength{\itemsep}{1ex}%
+    %\setlength{\parsep}{2pt}%
+    \setlength{\listparindent}{0pt}%
+    \setlength{\itemindent}{0pt}%
+    \setlength{\leftmargin}{1ex}%
+    \setlength{\rightmargin}{0pt}%
+  }\color{accentlight}\item%
+}{%  
+  \end{list}%
+}
+

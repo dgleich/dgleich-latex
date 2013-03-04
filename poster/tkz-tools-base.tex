@@ -1,0 +1,915 @@
+% tkz-tools-base.tex    
+% Copyright 2010 by Alain Matthes
+% This file may be distributed and/or modified
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+
+
+%  utf8 encoding
+
+\def\fileversion{1.10 c}
+\def\filedate{2011/01/08}
+
+%<--------------------------------------------------------------------------–>
+\global\let\@xa\tkz@init@xmin
+\global\let\@xb\tkz@init@xmax
+\global\let\@ya\tkz@init@ymin
+\global\let\@yb\tkz@init@ymax 
+%<--------------------------------------------------------------------------–>
+\gdef\xgrad{1}
+\gdef\ygrad{1}
+\gdef\tkz@xa{0}
+\gdef\tkz@xb{10}
+\gdef\tkz@ya{0}
+\gdef\tkz@yb{10}
+\newif\iftkz@init@NO
+\pgfkeys{
+  /tkzInit/.cd,
+  xmin/.code     = {\def\tkz@init@xmin{#1}},
+  xmax/.code     = {\def\tkz@init@xmax{#1}},
+  xstep/.code    = {\def\tkz@init@xstep{#1}},
+  ymin/.code     = {\def\tkz@init@ymin{#1}},
+  ymax/.code     = {\def\tkz@init@ymax{#1}},
+  ystep/.code    = {\def\tkz@init@ystep{#1}}, 
+  NO/.is if      = tkz@init@NO,
+  NO/.default    = true   } 
+  
+\def\tkzInit{\pgfutil@ifnextchar[{\tkz@Init}{\tkz@Init[]}}                                    
+\def\tkz@Init[#1]{%
+\pgfkeys{/tkzInit/.cd,
+         xmin  = 0,
+         xmax  = 10,
+         xstep = 1,
+         ymin  = 0,
+         ymax  = 10,
+         ystep = 1,
+         NO    = false 
+}  
+  \pgfqkeys{/tkzInit}{#1}
+  \ifx\tkzfctloaded\undefined
+    \else   
+   \tkz@tkzf@fct=0 %  only if tkz-fct loaded
+   \fi   
+  \xdef\tkz@init@xorigine{0}
+  \xdef\tkz@init@yorigine{0}
+  \FPsgn\@xsgmin{\tkz@init@xmin}
+  \FPsgn\@xsgmax{\tkz@init@xmax}
+  \FPsgn\@ysgmin{\tkz@init@ymin}
+  \FPsgn\@ysgmax{\tkz@init@ymax}
+  \global\let\@xa\tkz@init@xmin
+  \global\let\@xb\tkz@init@xmax
+  \global\let\@ya\tkz@init@ymin
+  \global\let\@yb\tkz@init@ymax
+   \tkz@init@NOfalse  
+  \ifx\@xsgmin\@xsgmax \tkz@init@NOtrue \fi
+  \ifx\@ysgmin\@ysgmax \tkz@init@NOtrue  \fi
+  \iftkz@init@NO%
+  \ifx\@xsgmin\@xsgmax
+    \FPadd{\tkz@init@xmax}{\tkz@init@xmax}{-\tkz@init@xmin}%
+    \edef\tkz@init@xorigine{\tkz@init@xmin}
+    \edef\tkz@init@xmin{0}
+  \fi
+
+  \ifx\@ysgmin\@ysgmax
+    \FPadd{\tkz@init@ymax}{\tkz@init@ymax}{-\tkz@init@ymin}%
+    \edef\tkz@init@yorigine{\tkz@init@ymin}
+    \edef\tkz@init@ymin{0}
+  \fi
+  \fi
+  \FPdiv{\tkz@xa}{\tkz@init@xmin}{\tkz@init@xstep}
+  \FPdiv{\tkz@xb}{\tkz@init@xmax}{\tkz@init@xstep}
+  \FPdiv{\tkz@ya}{\tkz@init@ymin}{\tkz@init@ystep}
+  \FPdiv{\tkz@yb}{\tkz@init@ymax}{\tkz@init@ystep}
+  \tkz@getdecimal{\tkz@init@xstep} % amélioration nb dec et integer
+  \global\edef\tkz@init@xdec{\number\c@pgfmath@countb}
+  \tkz@getdecimal{\tkz@init@ystep}
+  \global\edef\tkz@init@ydec{\number\c@pgfmath@countb} 
+}%
+%<--------------------------------------------------------------------------–>
+\pgfkeys{Clip/.cd, space/.code     = {\def\tkz@CLI@space{#1}}} 
+
+\def\tkzClip{\pgfutil@ifnextchar[{\tkz@Clip}{\tkz@Clip[]}} 
+\def\tkz@Clip[#1]{%
+\pgfkeys{Clip/.cd,space    = {}} 
+\pgfqkeys{/Clip}{#1} 
+\ifx\tkzutil@empty\tkz@CLI@space
+    \clip (\tkz@xa,\tkz@ya) rectangle (\tkz@xb,\tkz@yb);
+ \else
+    \FPadd{\tkz@xxa}{\tkz@xa}{-\tkz@CLI@space}
+    \FPadd{\tkz@yya}{\tkz@ya}{-\tkz@CLI@space}
+    \FPadd{\tkz@xxb}{\tkz@xb}{\tkz@CLI@space}
+    \FPadd{\tkz@yyb}{\tkz@yb}{\tkz@CLI@space} 
+    \clip (\tkz@xxa,\tkz@yya) rectangle (\tkz@xxb,\tkz@yyb);
+\fi
+} 
+%todo add options
+%<--------------------------------------------------------------------------–>
+%<--------------------------------------------------------------------------–> 
+\def\tkz@showgrad#1{%
+\FPifint{#1}\FPtrunc\tkz@result{#1}{0}\else\FPset\tkz@result{#1}\fi}%
+
+\def\tkz@Xresult{%
+\tkz@showgrad{\xgrad}%
+\iftkz@np% avec ou sans numprint
+   $\tkz@X@gradsize{\tkz@result}$% 
+\else
+   $\tkz@X@gradsize{\numprint{\tkz@result}}$%     
+\fi
+}%
+%<--------------------------------------------------------------------------–>
+\def\tkz@Yresult{%
+\tkz@showgrad{\ygrad}%
+\iftkz@np 
+   $\tkz@Y@gradsize{\tkz@result}$ 
+\else
+   $\tkz@Y@gradsize{\numprint{\tkz@result}}$
+\fi%
+}% 
+%<--------------------------------------------------------------------------–>
+%<--------------------------------------------------------------------------–>
+\def\tkz@Xshowgradresult{% 
+\iftkz@X@orig
+\tkz@Xresult% 
+\else % orig 
+       \iftkz@init@NO% 
+          \unless\ifx\tkz@pos\posmin
+          \tkz@Xresult\fi
+       \else % NO  
+         \unless\ifx\tkz@pos\xtkzero%
+         \tkz@Xresult
+         \fi%end of xtkzero
+      \fi%end of NO
+\fi%end of orig
+}%
+%<--------------------------------------------------------------------------–>
+\def\tkz@Yshowgradresult{% 
+\iftkz@Y@orig
+\tkz@Yresult%
+\else % orig 
+     \iftkz@init@NO%
+        \unless\ifx\tkz@pos\posmin
+        \tkz@Yresult\fi
+      \else % NO
+        \unless\ifx\tkz@pos\ytkzero%
+        \tkz@Yresult
+       \fi%end of xtkzero
+    \fi%end of NO
+\fi%end of orig
+}%
+%<--------------------------------------------------------------------------–>
+%              Setup   axe
+%<--------------------------------------------------------------------------–>
+\pgfkeys{tkzaxis/.cd,
+line width/.code         = {\global\edef\tkz@sua@lw{#1}},
+gradsize/.code           = {\global\edef\tkz@sua@gradsize{#1}},
+color/.code              = {\global\edef\tkz@sua@color{#1}},
+tickwd/.code             = {\global\edef\tkz@sua@tickwd{#1}},
+ticka/.code              = {\global\edef\tkz@sua@ticka{#1}},
+tickb/.code              = {\global\edef\tkz@sua@tickb{#1}}
+} 
+
+\def\tkzSetUpAxis{\pgfutil@ifnextchar[{\tkz@SetUpAxis}{\tkz@SetUpAxis[]}} 
+\def\tkz@SetUpAxis[#1]{%
+\begingroup
+ \pgfkeys{/tkzaxis/.cd,
+ line width  = \tkz@init@lw,
+ gradsize    = \tkz@init@gradsize,
+ color       = \tkz@init@color,
+ tickwd      = \tkz@init@tickwd,
+ ticka       = \tkz@init@ticka,
+ tickb       = \tkz@init@tickb
+ }
+\pgfqkeys{/tkzaxis}{#1} 
+\endgroup}
+%<--------------------------------------------------------------------------–>
+%                 tkzDrawX      todo améliorer les unités
+%<--------------------------------------------------------------------------–>
+\pgfkeys{%     prob avec space
+tkzdrawX/.cd,
+color/.code                = {\global\def\tkz@X@color{#1}},
+label/.code                = {\global\def\tkz@X@label{#1}}, 
+right space/.code          = {\global\def\tkz@axe@rxspace{#1}}, 
+left space/.code           = {\global\def\tkz@axe@lxspace{#1}},
+noticks/.is if             = tkz@X@noticks,
+noticks/.default           = true, 
+trig/.code                 = {\global\def\tkz@X@trig{#1}},    
+step/.code                 = {\FPeval\tkz@posnext{#1}},  
+tickwd/.code               = {\global\def\tkz@X@tickwd{#1}},
+tickup/.code               = {\global\def\tkz@X@tickup{#1}},
+tickdn/.code               = {\global\def\tkz@X@tickdn{#1}},   
+/tkzdrawX/.unknown/.code   = {\let\searchname=\pgfkeyscurrentname
+                              \pgfkeysalso{\searchname/.try=#1,
+                               /tikz/\searchname/.retry=#1}}}
+                                     
+\def\tkzDrawX{\pgfutil@ifnextchar[{\tkz@DrawX}{\tkz@DrawX[]}}
+\def\tkz@DrawX[#1]{
+\begingroup%
+\pgfkeys{/tkzdrawX/.cd,
+color       = \tkz@init@color,
+label       = $x$,
+trig        = 0,
+step        = \tkz@init@xstep,
+right space = \tkz@axe@rightspace,
+left space  = \tkz@axe@leftspace,
+noticks     = false,
+tickwd      = \tkz@init@tickwd,
+tickup      = \tkz@init@ticka,
+tickdn      = \tkz@init@tickb}
+\pgfqkeys{/tkzdrawX}{#1}
+\FPtrunc\posmax{\tkz@xb}{\tkz@init@xdec}
+\FPtrunc\posmin{\tkz@xa}{\tkz@init@xdec}
+\FPadd\tkz@xbsup{\tkz@xb}{\tkz@axe@rxspace}
+\FPadd\tkz@xainf{\tkz@xa}{-\tkz@axe@lxspace}
+\path (\tkz@xainf,0)--(\tkz@xbsup,0) node(tkz@xline){};
+\draw[color = \tkz@X@color,
+      xaxe style,
+      /tkzdrawX/.cd,
+      #1] (\tkz@xainf,0)--(\tkz@xbsup,0)
+      node[xlabel style,
+           /tkzdrawX/.cd,#1]{\tkz@X@label};
+ \iftkz@X@noticks
+ \else 
+  \ifnum\tkz@X@trig=0
+   \FPtrunc\posmax{\posmax}{\tkz@init@xdec}%
+   \FPdiv\tkz@posnext{\tkz@posnext}{\tkz@init@xstep}
+   \FPadd\posnext{\posmin}{\tkz@posnext}
+   \foreach \pos in {\posmin,\posnext,...,\posmax}{% 
+     \draw[color = \tkz@X@color,
+           line width = \tkz@X@tickwd,
+           shift      = {(\pos,0)}]%
+           (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickdn);} 
+    \else
+       \FPadd{\posmin}{\posmin}{.5}% 
+       \FPdiv\posmax{\posmax}{\FPpi}%
+        \FPmul\posmax{\posmax}{\tkz@X@trig}% 
+        \FPdiv\posmin{\posmin}{\FPpi}%
+        \FPmul\posmin{\posmin}{\tkz@X@trig}%
+        \FPround\posmin{\posmin}{0}% 
+        \foreach \pos in {\posmin,...,\posmax}{% 
+           \FPmul\pospi{\pos}{\FPpi}
+           \FPdiv\pospi{\pospi}{\tkz@X@trig}%
+           \draw[color = \tkz@X@color,
+                line width = \tkz@X@tickwd,%
+                          shift      = {(\pospi,0)}]%
+           (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickdn);
+         }% end foreach
+         \fi
+ \fi 
+\endgroup}
+%<--------------------------------------------------------------------------->
+\newif\iftkz@np 
+\pgfkeys{%     prob avec space
+tkzlabelX/.cd,
+gradsize/.code              = {\def\tkz@X@gradsize{#1}}, 
+frac/.code                  = {\def\tkz@X@frac{#1}},
+trig/.code                  = {\def\tkz@X@trig{#1}},  
+step/.code                  = {\def\tkz@posnext{#1}},
+color/.code                 = {\def\tkz@X@color{#1}},
+label options/.code         = {\def\cmd@X@option{#1}},
+np off/.is if               = tkz@np,
+np off/.default             = true,
+orig/.is if                 = tkz@X@orig,
+orig/.default               = false,
+tickwd/.code               = {\global\def\tkz@X@tickwd{#1}},
+tickup/.code               = {\global\def\tkz@X@tickup{#1}},
+tickdn/.code               = {\global\def\tkz@X@tickdn{#1}},   
+/tkzlabelX/.unknown/.code   = {\let\searchname=\pgfkeyscurrentname
+                              \pgfkeysalso{\searchname/.try=#1,
+                               /tikz/\searchname/.retry=#1}}}  
+                               \def\tkzLabelX{\pgfutil@ifnextchar[{\tkz@LabelX}{\tkz@LabelX[]}}
+\def\tkz@LabelX[#1]{% 
+\begingroup
+\pgfkeys{/tkzlabelX/.cd,
+frac          = 0,
+trig          = 0,
+step          = \tkz@init@xstep,
+gradsize      = \tkz@init@gradsize,
+color         = \tkz@init@color,
+np off        = false,
+orig          = true,
+label options = {},
+tickwd      = \tkz@init@tickwd,
+tickup      = \tkz@init@ticka,
+tickdn      = \tkz@init@tickb}  
+\pgfqkeys{/tkzlabelX}{#1}
+\FPtrunc\posmin{\tkz@xa}{\tkz@init@xdec}% 
+\FPtrunc\posmax{\tkz@xb}{\tkz@init@xdec}%
+\FPtrunc\xtkzero{0.0000000}{\tkz@init@xdec}% 
+
+\ifnum\tkz@X@frac=0 %
+  \ifnum\tkz@X@trig=0 % affichage normal
+   \FPdiv\posnext{\tkz@posnext}{\tkz@init@xstep}
+   \FPadd\posnext{\posmin}{\posnext}      
+   \foreach \pos in {\posmin,\posnext,...,\posmax}{%
+     \FPtrunc\tkz@pos{\pos}{\tkz@init@xdec}%
+     \FPmul{\xgrad}{\pos}{\tkz@init@xstep}%
+     \FPadd{\xgrad}{\xgrad}{\tkz@init@xorigine}%
+     \FPtrunc\xgrad{\xgrad}{\tkz@init@xdec}%
+     \protected@edef\tkz@temp{%
+     \noexpand\path[shift = {(\pos,0)}]
+     (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickdn)%
+     node[xlabel style,%
+          color = \tkz@X@color,fill=\tkz@fillcolor,
+          \cmd@X@option]}\tkz@temp{\tkz@Xshowgradresult}; 
+}% 
+  \else% trig > 0  
+     \FPadd{\posmin}{\posmin}{.5}%
+     \FPdiv\posmax{\posmax}{\FPpi}%
+     \FPmul\posmax{\posmax}{\tkz@X@trig}% 
+     \FPdiv\posmin{\posmin}{\FPpi}%
+     \FPmul\posmin{\posmin}{\tkz@X@trig}%
+     \FPround\posmin{\posmin}{0}% 
+     \foreach \pos in {\posmin,...,\posmax}{% 
+        \tkzPrintFracWithPi{\pos}{\tkz@X@trig}
+        \FPmul\pospi{\pos}{\FPpi}
+        \FPdiv\pospi{\pospi}{\tkz@X@trig}%
+        \protected@edef\tkz@temp{%
+        \noexpand\path[shift      = {(\pospi,0)}]%
+        (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickdn)%
+                    node[xlabel style,
+                    text height = 8pt,
+                    fill=\tkz@fillcolor]}\tkz@temp%
+              {\tkzprintfrac};% 
+      }% end foreach   
+    \fi
+\else% frac > 0  
+\FPround\posmin{\posmin}{0}%  
+   \foreach \pos in {\posmin,...,\posmax}{%
+    \tkzPrintFrac{\pos}{\tkz@X@frac}% 
+    \draw[line width = \tkz@X@tickwd,
+          shift      = {(\pos,0)},
+          color      = \tkz@X@color,
+          fill       = \tkz@fillcolor]%
+          (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickdn)%
+          node[xlabel style,text height = 8pt]{\tkzprintfrac}%
+   ;%    
+  }% end foreach  
+\fi
+\endgroup
+} 
+%<--------------------------------------------------------------------------–>
+\pgfkeys{%     prob avec space
+tkzAxeX/.cd,
+color/.code                 = {\def\tkz@X@color{#1}},
+label/.code                 = {\global\def\tkz@X@label{#1}},
+frac/.code                  = {\def\tkzX@frac{#1}},
+trig/.code                  = {\def\tkzX@trig{#1}},
+/tkzAxeX/.unknown/.code     = {\let\searchname=\pgfkeyscurrentname
+                               \pgfkeysalso{\searchname/.try=#1,
+                               /tikz/\searchname/.retry=#1}}} 
+                                
+\def\tkzAxeX{\pgfutil@ifnextchar[{\tkz@AxeX}{\tkz@AxeX[]}}
+\def\tkz@AxeX[#1]{%
+\begingroup
+ \pgfkeys{/tkzAxeX/.cd,
+ color    = \tkz@init@color,
+ label    = $x$,
+ frac     = 0,
+ trig     = 0}
+\pgfqkeys{/tkzAxeX}{#1}
+  \ifnum\tkzX@trig=0 
+    \protected@edef\tkz@temp{%
+    \noexpand\tkzDrawX[label=\tkz@X@label,#1]}\tkz@temp
+\tkzLabelX 
+\else
+    \protected@edef\tkz@temp{%
+    \noexpand\tkzDrawX[trig=\tkzX@trig,
+                      label=\tkz@X@label,#1]}\tkz@temp
+\tkzLabelX[\tkzX@trig]    
+\fi
+\endgroup} 
+
+%<--------------------------------------------------------------------------–>
+%                 tkzDrawY      todo améliorer les unités
+%<--------------------------------------------------------------------------–>
+\pgfkeys{%     prob avec space
+tkzdrawY/.cd,
+color/.code                = {\def\tkz@Y@color{#1}},
+label/.code                = {\def\tkz@Y@label{#1}}, 
+up space/.code             = {\global\def\tkz@axe@uyspace{#1}}, 
+down space/.code           = {\global\def\tkz@axe@dyspace{#1}},
+noticks/.is if             = tkz@Y@noticks,
+noticks/.default           = true,
+trig/.code                 = {\global\def\tkz@Y@trig{#1}},      
+step/.code                 = {\FPeval\tkz@posnext{#1}},  
+tickwd/.code               = {\global\def\tkz@Y@tickwd{#1}},
+ticklt/.code               = {\global\def\tkz@Y@ticklt{#1}},
+tickrt/.code               = {\global\def\tkz@Y@tickrt{#1}},   
+/tkzdrawY/.unknown/.code   = {\let\searchname=\pgfkeyscurrentname
+                              \pgfkeysalso{\searchname/.try=#1,
+                               /tikz/\searchname/.retry=#1}}}
+                                     
+\def\tkzDrawY{\pgfutil@ifnextchar[{\tkz@DrawY}{\tkz@DrawY[]}}
+\def\tkz@DrawY[#1]{%
+\begingroup
+\pgfkeys{/tkzdrawY/.cd,
+color       = \tkz@init@color,
+label       = $y$,
+trig        = 0,
+step        = \tkz@init@ystep,
+up space    = \tkz@axe@upspace,
+down space  = \tkz@axe@downspace,
+noticks     = false,
+tickwd      = \tkz@init@tickwd,
+ticklt      = \tkz@init@tickb,
+tickrt      = \tkz@init@ticka}
+\pgfqkeys{/tkzdrawY}{#1}
+\FPtrunc\posmax{\tkz@yb}{\tkz@init@ydec}
+\FPtrunc\posmin{\tkz@ya}{\tkz@init@ydec}
+\FPadd\tkz@ybsup{\tkz@yb}{\tkz@axe@uyspace}
+\FPadd\tkz@yainf{\tkz@ya}{-\tkz@axe@dyspace}
+\path (0,\tkz@yainf)--(0,\tkz@ybsup) node(tkz@yline){};
+\draw[color = \tkz@Y@color,
+      yaxe style,/tkzdrawY/.cd,#1] (0,\tkz@yainf)--(0,\tkz@ybsup)
+      node[ylabel style,/tkzdrawY/.cd,#1]{\tkz@Y@label};
+ \iftkz@Y@noticks
+ \else 
+   \ifnum\tkz@Y@trig=0   
+   \FPtrunc\posmax{\posmax}{\tkz@init@ydec}%
+   \FPdiv\tkz@posnext{\tkz@posnext}{\tkz@init@ystep}
+   \FPadd\posnext{\posmin}{\tkz@posnext}
+   \foreach \pos in {\posmin,\posnext,...,\posmax}{% 
+     \draw[color = \tkz@Y@color,
+           line width = \tkz@Y@tickwd,
+           shift       = {(0,\pos)}]% 
+            (\tkz@Y@tickrt,0pt)--(-\tkz@Y@ticklt,0pt);}
+         \else
+       \FPadd{\posmin}{\posmin}{.5}% 
+       \FPdiv\posmax{\posmax}{\FPpi}%
+        \FPmul\posmax{\posmax}{\tkz@Y@trig}% 
+        \FPdiv\posmin{\posmin}{\FPpi}%
+        \FPmul\posmin{\posmin}{\tkz@Y@trig}%
+        \FPround\posmin{\posmin}{0}% 
+        \foreach \pos in {\posmin,...,\posmax}{% 
+           \FPmul\pospi{\pos}{\FPpi}
+           \FPdiv\pospi{\pospi}{\tkz@Y@trig}%
+           \draw[color = \tkz@Y@color,
+                line width = \tkz@Y@tickwd,%
+                          shift      = {(0,\pospi)}]%
+           (\tkz@Y@tickrt,0pt)--(-\tkz@Y@ticklt,0pt);
+         }% end foreach
+         \fi     
+ \fi        
+\endgroup}
+%<--------------------------------------------------------------------------->
+\pgfkeys{%     prob avec space
+tkzticksY/.cd,
+gradsize/.code              = {\def\tkz@Y@gradsize{#1}}, 
+frac/.code                  = {\def\tkz@Y@frac{#1}},
+trig/.code                  = {\def\tkz@Y@trig{#1}},  
+step/.code                  = {\def\tkz@posnext{#1}},
+color/.code                 = {\def\tkz@Y@color{#1}},
+label options/.code         = {\def\cmd@Y@option{#1}}, 
+np off/.is if               = tkz@np,
+np off/.default             = true,
+orig/.is if                 = tkz@Y@orig,
+orig/.default               = false,
+tickwd/.code               = {\global\def\tkz@Y@tickwd{#1}},
+ticklt/.code               = {\global\def\tkz@Y@ticklt{#1}},
+tickrt/.code               = {\global\def\tkz@Y@tickrt{#1}},      
+/tkzticksY/.unknown/.code   = {\let\searchname=\pgfkeyscurrentname
+                              \pgfkeysalso{\searchname/.try=#1,
+                               /tikz/\searchname/.retry=#1}}}  
+                               \def\tkzLabelY{\pgfutil@ifnextchar[{\tkz@LabelY}{\tkz@LabelY[]}}
+\def\tkz@LabelY[#1]{%
+\begingroup
+\pgfkeys{/tkzticksY/.cd,
+frac     = 0,
+trig     = 0,
+step     = \tkz@init@ystep,
+gradsize = \tkz@init@gradsize,
+color    = \tkz@init@color,
+np off   = false,  
+orig     = true,  
+label options={},
+tickwd      = \tkz@init@tickwd,
+ticklt      = \tkz@init@tickb,
+tickrt      = \tkz@init@ticka} 
+\pgfqkeys{/tkzticksY}{#1}
+\FPtrunc\posmin{\tkz@ya}{\tkz@init@ydec}% 
+\FPtrunc\posmax{\tkz@yb}{\tkz@init@ydec}%
+\FPtrunc\ytkzero{0.0000000}{\tkz@init@ydec}% 
+
+\ifnum\tkz@Y@frac=0
+  \ifnum\tkz@Y@trig=0 % affichage normal    
+   \FPdiv\posnext{\tkz@posnext}{\tkz@init@ystep}
+   \FPadd\posnext{\posmin}{\posnext}      
+   \foreach \pos in {\posmin,\posnext,...,\posmax}{%
+     \FPtrunc\tkz@pos{\pos}{\tkz@init@ydec}%
+     \FPmul{\ygrad}{\pos}{\tkz@init@ystep}%
+     \FPadd{\ygrad}{\ygrad}{\tkz@init@yorigine}%
+     \FPtrunc\ygrad{\ygrad}{\tkz@init@ydec}%
+     \protected@edef\tkz@temp{%
+     \noexpand\path[shift = {(0,\pos)}]%
+        (\tkz@Y@tickrt,0pt)--(-\tkz@Y@ticklt,0pt)%
+        node[ylabel style, 
+             color = \tkz@Y@color,
+             fill  = \tkz@fillcolor,
+                     \cmd@Y@option]}\tkz@temp%
+             {\tkz@Yshowgradresult};
+}
+  \else% trig > 0  
+     \FPadd{\posmin}{\posmin}{.5}%
+     \FPdiv\posmax{\posmax}{\FPpi}%
+     \FPmul\posmax{\posmax}{\tkz@Y@trig}% 
+     \FPdiv\posmin{\posmin}{\FPpi}%
+     \FPmul\posmin{\posmin}{\tkz@Y@trig}%
+     \FPround\posmin{\posmin}{0}% 
+     \foreach \pos in {\posmin,...,\posmax}{% 
+        \tkzPrintFracWithPi{\pos}{\tkz@Y@trig}
+        \FPmul\pospi{\pos}{\FPpi}
+        \FPdiv\pospi{\pospi}{\tkz@Y@trig}%
+        \protected@edef\tkz@temp{%
+        \noexpand\path[shift      = {(0,\pospi)}]%
+             (\tkz@Y@tickrt,0pt)--(-\tkz@Y@ticklt,0pt)%
+             node[ylabel style,
+                  text height = 8pt,
+                  fill         =\tkz@fillcolor,
+                  \cmd@Y@option]}\tkz@temp{\tkzprintfrac};% 
+      }% end foreach   
+    \fi    
+\else% frac > 0  
+\FPround\posmin{\posmin}{0}%
+  \foreach \pos in {\posmin,...,\posmax}{%
+    \tkzPrintFrac{\pos}{\tkz@Y@frac}% 
+    \draw[line width = \tkz@Y@tickwd,
+          shift      = {(0,\pos)},
+          color      = \tkz@Y@color,
+          fill       = \tkz@fillcolor]%
+          (\tkz@Y@tickrt,0pt)--(-\tkz@Y@ticklt,0pt)%
+          node[ylabel style,text height = 8pt]{\tkzprintfrac}%
+   ;% 
+  }% end foreach
+\fi
+\endgroup} 
+%<--------------------------------------------------------------------------–>
+\pgfkeys{%     prob avec space
+  tkzAxeY/.cd,
+  color/.code      = {\def\tkz@Y@color{#1}},
+  label/.code      = {\global\def\tkz@Y@label{#1}},  
+/tkzAxeY/.unknown/.code   = {\let\searchname=\pgfkeyscurrentname
+                              \pgfkeysalso{\searchname/.try=#1,
+                               /tikz/\searchname/.retry=#1}}} 
+                                
+\def\tkzAxeY{\pgfutil@ifnextchar[{\tkz@AxeY}{\tkz@AxeY[]}}
+\def\tkz@AxeY[#1]{%
+\begingroup
+ \pgfkeys{/tkzAxeY/.cd,
+ color    = \tkz@init@color,
+ label    = $y$}
+\pgfqkeys{/tkzAxeY}{#1} 
+    \protected@edef\tkz@temp{%
+    \noexpand\tkzDrawY[label=\tkz@Y@label,#1]}\tkz@temp
+\tkzLabelY
+\endgroup}  
+\def\tkzAxeXY{\tkzDrawX\tkzDrawY\tkzLabelX\tkzLabelY}
+\def\tkzDrawXY{\tkzDrawX\tkzDrawY}
+\def\tkzLabelXY{\tkzLabelX\tkzLabelY}     
+%<--------------------------------------------------------------------------–>
+%                                grid
+%<--------------------------------------------------------------------------–>
+\newif\iftkz@tkzg@sub 
+\def\tkzCoeffSubColor{50} 
+\def\tkzCoeffSubLw{0.8}
+\def\tkz@grid@xstep{0.2}
+\def\tkz@grid@ystep{0.2}
+\pgfkeys{
+  /tkzGrid/.cd,
+  color/.code      = {\def\tkz@tkzg@color{#1}%
+                \edef\tkz@tkzg@subcolor{\tkz@tkzg@color!\tkzCoeffSubColor}},
+  subxstep/.code   = {\def\tkz@tkzg@subxstep{#1}},
+  subystep/.code   = {\def\tkz@tkzg@subystep{#1}},
+  line width/.code = {\def\tkz@tkzg@lw{#1} 
+                      \tkz@ax=\tkz@tkzg@lw
+                      \multiply\tkz@ax by\tkzCoeffSubLw %
+                      \def\tkz@tkzg@sublw{\tkz@ax}},
+  sub/.is if       = tkz@tkzg@sub,
+  sub/.default     = true }   
+
+\def\tkzGrid{\pgfutil@ifnextchar[{\tkz@Grid}{\tkz@Grid[]}}
+\def\tkz@Grid[#1]{\@ifnextchar({\tkz@@Grid[#1]}%
+                               {\tkz@@Grid[#1](\@xa,\@ya)(\@xb,\@yb)}}
+\def\tkz@@Grid[#1](#2,#3)(#4,#5){%
+\pgfkeys{
+  /tkzGrid/.cd,
+  sub        = false,
+  color      = \tkz@grid@color, 
+  subxstep   = \tkz@grid@xstep,
+  subystep   = \tkz@grid@ystep,
+  line width = \tkz@grid@lw}
+  \pgfqkeys{/tkzGrid}{#1}   
+    \begingroup
+    \FPadd{\tkz@gxa}{#2}{-\tkz@init@xorigine}
+    \FPadd{\tkz@gxb}{#4}{-\tkz@init@xorigine}
+    \FPadd{\tkz@gya}{#3}{-\tkz@init@yorigine}
+    \FPadd{\tkz@gyb}{#5}{-\tkz@init@yorigine}
+    \FPdiv{\tkz@gxa}{\tkz@gxa}{\tkz@init@xstep}
+    \FPdiv{\tkz@gya}{\tkz@gya}{\tkz@init@ystep}
+    \FPdiv{\tkz@gxb}{\tkz@gxb}{\tkz@init@xstep}
+    \FPdiv{\tkz@gyb}{\tkz@gyb}{\tkz@init@ystep}
+    \iftkz@tkzg@sub%
+      \FPdiv{\@subxstep}{\tkz@tkzg@subxstep}{\tkz@init@xstep}%
+      \FPdiv{\@subystep}{\tkz@tkzg@subystep}{\tkz@init@ystep}%
+      \draw [xstep      = \@subxstep cm,%
+             ystep      = \@subystep cm,%
+             color      = \tkz@tkzg@subcolor,%
+             line width = \tkz@tkzg@sublw]%
+             (\tkz@gxa,\tkz@gya) grid (\tkz@gxb,\tkz@gyb);%
+    \fi
+    \draw [xstep      = 1 cm,%
+           ystep      = 1 cm,%
+           color      = \tkz@tkzg@color,%
+           line width = \tkz@tkzg@lw]%
+           (\tkz@gxa,\tkz@gya) grid (\tkz@gxb,\tkz@gyb);%
+    \endgroup
+}%
+%<--------------------------------------------------------------------------–>
+%                                repère
+%<--------------------------------------------------------------------------–>
+
+\newif\iftkz@Rep@orig
+\pgfkeys{
+  /tkzRep/.cd,
+  line width/.code = {\def\tkz@Rep@lw{#1}},
+  xlabel/.code     = {\def\tkz@Rep@xlabel{#1}},
+  ylabel/.code     = {\def\tkz@Rep@ylabel{#1}},
+  posxlabel/.code  = {\def\tkz@Rep@posxlabel{#1}},
+  posylabel/.code  = {\def\tkz@Rep@posylabel{#1}},
+  xnorm/.code      = {\def\tkz@Rep@xnorm{#1}}, 
+  ynorm/.code      = {\def\tkz@Rep@ynorm{#1}},
+  color/.code      = {\def\tkz@Rep@color{#1}},
+  colorlabel/.code = {\def\tkz@Rep@colorlabel{#1}}}  
+%<--------------------------------------------------------------------------–>
+\def\tkzRep{\pgfutil@ifnextchar[{\tkz@Rep}{%
+                                 \tkz@Rep[]}} 
+\def\tkz@Rep[#1]{%
+\pgfkeys{
+ /tkzRep/.cd, 
+line width         = \tkz@sur@lw,
+xlabel      = $\vec{\imath}$,
+ylabel      = $\vec{\jmath}$,
+posxlabel   = {\tkz@sur@posxlabel}, 
+posylabel   = {\tkz@sur@posylabel},
+xnorm       = 1,
+ynorm       = 1,
+color       = \tkz@sur@color,
+colorlabel  = \tkz@sur@colorlabel}
+\pgfqkeys{/tkzRep}{#1} 
+\begingroup
+  \protected@edef\tkz@temp{%  
+  \noexpand\draw [line width=\tkz@Rep@lw,color=\tkz@Rep@color,rep style]%
+  (0,0) to node[\tkz@Rep@posylabel,color = \tkz@Rep@colorlabel]}\tkz@temp%
+      {\tkz@Rep@ylabel}(0,\tkz@Rep@ynorm);
+  \protected@edef\tkz@temp{%
+  \noexpand \draw [line width=\tkz@Rep@lw,color=\tkz@Rep@color,rep style]%
+   (0,0) to  node[\tkz@Rep@posxlabel,color = \tkz@Rep@colorlabel]}\tkz@temp%
+      {\tkz@Rep@xlabel}(\tkz@Rep@xnorm,0);  
+\endgroup 
+} 
+
+%<--------------------------------------------------------------------------–>
+%                 tkzX   obsolete
+%<--------------------------------------------------------------------------–>
+\pgfkeys{%     prob avec space
+  tkzX/.cd,
+  pos/.code        = {\def\tkz@X@pos{#1}},
+  trig/.code       = {\def\tkz@X@trig{#1}},
+  lw/.code         = {\def\tkz@X@lw{#1}},
+  color/.code      = {\def\tkz@X@color{#1}},
+  label/.code      = {\def\tkz@X@label{#1}},
+  poslabel/.code   = {\def\tkz@X@poslabel{#1}},
+  tickwd/.code     = {\def\tkz@X@tickwd{#1}},
+  tickup/.code     = {\def\tkz@X@tickup{#1}},
+  tickdn/.code     = {\def\tkz@X@tickdn{#1}},
+  gradsize/.code   = {\def\tkz@X@gradsize{#1}},
+  step/.code       = {\def\tkz@posnext{#1}},
+  noticks/.is if   = tkz@X@noticks,
+  noticks/.default = true,  
+  nograd/.is if    = tkz@X@nograd,
+  nograd/.default  = true,  
+  orig/.is if      = tkz@X@orig,
+  orig/.default    = true,  
+  % unit/.is if      = tkz@X@unit,
+ % unit/.default    = true
+  } 
+
+\def\tkzX{\pgfutil@ifnextchar[{\tkz@X}{\tkz@X[]}}
+\def\tkz@X[#1]{% 
+\begingroup
+ \pgfkeys{/tkzX/.cd,
+ trig     = 0,
+ lw       = \tkz@init@lw,
+ gradsize = \tkz@init@gradsize,
+ color    = \tkz@init@color,
+ tickwd   = \tkz@init@tickwd,
+ tickup   = \tkz@init@ticka,
+ tickdn   = \tkz@init@tickb,  
+ pos      = {below = 3pt},
+ label    = $x$,
+ poslabel = {below = 3pt},
+ noticks  = false,
+ nograd   = false,
+% unit     = false,
+ orig     = false,
+ step    = \tkz@init@xstep
+ }    
+ \pgfqkeys{/tkzX}{#1}  
+   \FPtrunc\posmax{\tkz@xb}{\tkz@init@xdec}%
+   \FPtrunc\posmin{\tkz@xa}{\tkz@init@xdec}%
+   \FPdiv\tkz@posnext{\tkz@posnext}{\tkz@init@xstep}
+   \FPadd\posnext{\posmin}{\tkz@posnext}
+   \FPadd\tkz@xbsup{\tkz@xb}{\tkz@axe@rightspace}
+   \path (\tkz@xa,0)--(\tkz@xb,0) node(tkz@xline){};%
+    \protected@edef\tkz@temp{%
+    \noexpand%    
+   \draw[xaxe style,line width = \tkz@X@lw,%
+         color      = \tkz@X@color]%
+        (\tkz@xa,0)--(\tkz@xbsup,0)%
+         node[xlabel style,\tkz@X@poslabel]}\tkz@temp%
+         {\tkz@X@label};%
+    \FPtrunc\xtkzero{0.0000000}{\tkz@init@xdec}% 
+   \iftkz@X@noticks%
+   \else 
+\ifnum\tkz@X@trig=0%
+   \FPtrunc\posmax{\posmax}{\tkz@init@xdec}% 
+   \foreach \pos in {\posmin,\posnext,...,\posmax}{%
+      \FPtrunc\tkz@pos{\pos}{\tkz@init@xdec}%
+      \protected@edef\tkz@temp{%
+      \noexpand% 
+       \draw[line width = \tkz@X@tickwd,shift = {(\pos,0)}]%
+            (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickdn)%
+            node[\tkz@X@pos,inner sep = 0pt]}\tkz@temp
+        {\FPmul{\xgrad}{\pos}{\tkz@init@xstep}%
+         \FPadd{\xgrad}{\xgrad}{\tkz@init@xorigine}%
+         \FPtrunc\xgrad{\xgrad}{\tkz@init@xdec}%
+         \iftkz@X@orig% 
+               \iftkz@X@nograd
+               \else\tkz@showgrad{\xgrad}%
+                  $\textcolor{\tkz@sur@colorlabel}{%
+                  \tkz@X@gradsize{\numprint{\tkz@result}}}$%
+               \fi
+          \else % orig
+            \iftkz@init@NO% 
+               \ifx\tkz@pos\posmin
+               \else
+                  \tkz@showgrad{\xgrad}%
+                  $\textcolor{\tkz@sur@colorlabel}{%
+                  \tkz@X@gradsize{\numprint{\tkz@result}}}$
+               \fi
+            \else % NO
+               \ifx\tkz@pos\xtkzero%
+                   % \iftkz@X@unit\tkz@showgrad{\xgrad}%
+                   % $\textcolor{\tkz@sur@colorlabel}{%
+                   % \tkz@X@gradsize{\numprint{\tkz@result}}}$
+                   % \fi  
+               \else 
+                  \iftkz@X@nograd%
+                  \else\tkz@showgrad{\xgrad}%
+                    $\textcolor{\tkz@sur@colorlabel}{%
+                     \tkz@X@gradsize{\numprint{\tkz@result}}}$
+                  \fi
+               \fi%end of xtkzero
+          \fi%end of NO
+      \fi%end of orig
+};%  end of draw
+}% end foreach
+   \else %trig affichage
+       \FPadd{\posmin}{\posmin}{0.5}%
+       \FPdiv\nbtrigticksmax{\posmax}{\FPpi}%
+       \FPdiv\nbtrigticksmin{\posmin}{\FPpi}%
+       \FPmul\nbtrigticksmax{\nbtrigticksmax}{\tkz@X@trig}%
+       \FPmul\nbtrigticksmin{\nbtrigticksmin}{\tkz@X@trig}%
+       \FPround\nbtrigticksmin{\nbtrigticksmin}{0}% 
+       \foreach \pos in {\nbtrigticksmin,...,\nbtrigticksmax}{%
+          \FPmul\pospi{\pos}{\FPpi}
+          \FPdiv\pospi{\pospi}{\tkz@X@trig}%
+          \protected@edef\tkz@temp{%
+          \noexpand\draw[line width = \tkz@X@tickwd,%
+                         shift      = {(\pospi,0)}]%
+                      (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickup)%
+                      node[\tkz@X@pos,%
+                           text height = 8pt,%
+                           inner sep   = 1pt]}\tkz@temp%
+                {\tkzPrintFracWithPi{\pos}{\tkz@X@trig}%
+                 \tkzprintfrac};% 
+        }% end foreach                              
+    \fi
+\fi% end ticks  
+% \iftkz@init@NO\else\iftkz@X@unit%
+% %  on n'est à l'origine donc on peut placer l'unité 
+%           \draw[line width = \tkz@X@tickwd,%
+%                 inner sep  = 1pt] (0,0) -- (1,0)%
+%                 node[below=3pt]%
+%                 {$\tkz@X@gradsize{\numprint{\tkz@init@xstep}}$};
+%            \draw[line width = \tkz@X@tickwd,%
+%                  shift      = {(1,0)}]%
+%                 (0pt,\tkz@X@tickup)--(0pt,-\tkz@X@tickdn);%
+%           \fi  
+%    \fi 
+\endgroup
+ }% todo macro pour l'affichage 
+
+%<--------------------------------------------------------------------------–>
+%                                 tkzY
+%<--------------------------------------------------------------------------–>
+
+\pgfkeys{
+  tkzY/.cd,
+  pos/.code        = {\def\tkz@Y@pos{#1}},
+  trig/.code       = {\def\tkz@Y@trig{#1}},
+  lw/.code         = {\def\tkz@Y@lw{#1}},
+  color/.code      = {\def\tkz@Y@color{#1}},
+  label/.code      = {\def\tkz@Y@label{#1}},  
+  poslabel/.code   = {\def\tkz@Y@poslabel{#1}},
+  tickwd/.code     = {\def\tkz@Y@tickwd{#1}},
+  ticklt/.code     = {\def\tkz@Y@ticklt{#1}},
+  tickrt/.code     = {\def\tkz@Y@tickrt{#1}},
+  gradsize/.code   = {\def\tkz@Y@gradsize{#1}},
+  step/.code       = {\def\tkz@posnext{#1}}, 
+  noticks/.is if   = tkz@Y@noticks,
+  noticks/.default = true,  
+  nograd/.is if    = tkz@Y@nograd,
+  nograd/.default  = true,  
+  orig/.is if      = tkz@Y@orig,
+  orig/.default    = true,  
+  unit/.is if      = tkz@Y@unit,
+  unit/.default    = true  }    
+\def\tkzY{\pgfutil@ifnextchar[{\tkz@Y}{\tkz@Y[]}}
+\def\tkz@Y[#1]{%
+ \pgfkeys{/tkzY/.cd,
+ trig     = 0,
+ lw       = \tkz@init@lw,
+ gradsize = \tkz@init@gradsize,
+ color    = \tkz@init@color,
+ tickwd   = \tkz@init@tickwd,
+ tickrt   = \tkz@init@ticka,
+ ticklt   = \tkz@init@tickb,
+ label    = $y$,
+ poslabel = {left = 3pt},
+ pos      = {left = 3pt},   
+ noticks  = false,
+ nograd   = false,
+ unit     = false,
+ orig     = false,
+ step     = \tkz@init@ystep
+ }    
+ \pgfqkeys{/tkzY}{#1}  
+   \FPtrunc\posmax{\tkz@yb}{\tkz@init@ydec}%
+   \FPtrunc\posmin{\tkz@ya}{\tkz@init@ydec}%
+     \FPdiv\tkz@posnext{\tkz@posnext}{\tkz@init@ystep}
+   \FPadd\posnext{\posmin}{\tkz@posnext}  
+   \path (0,\tkz@ya)--(0,\tkz@yb) node(tkz@yline){};%
+   \FPadd\tkz@ybsup{\tkz@yb}{\tkz@axe@upspace}   
+   \protected@edef\tkz@temp{%
+   \noexpand% 
+   \draw[line width = \tkz@Y@lw,%
+         color      = \tkz@Y@color,yaxe style]%
+        (0,\tkz@ya)--(0,\tkz@ybsup)%
+        node[\tkz@Y@poslabel,ylabel style]}\tkz@temp%
+        {\tkz@Y@label};%
+   \FPtrunc\ytkzero{0.000000}{\tkz@init@ydec}%
+   \iftkz@Y@noticks%
+   \else
+   \foreach \pos in {\posmin,\posnext,...,\posmax}{%
+       \FPtrunc\tkz@pos{\pos}{\tkz@init@ydec}%
+       \protected@edef\tkz@temp{%
+       \noexpand% 
+       \draw[line width = \tkz@Y@tickwd,%
+            shift       = {(0,\pos)}]%
+            (\tkz@Y@tickrt,0pt)--(-\tkz@Y@ticklt,0pt)%
+            node[\tkz@Y@pos,inner sep = 0pt]}\tkz@temp%
+         {\FPmul{\ygrad}{\pos}{\tkz@init@ystep}%
+          \FPadd{\ygrad}{\ygrad}{\tkz@init@yorigine}
+          \FPtrunc\ygrad{\ygrad}{\tkz@init@ydec}%
+          \iftkz@Y@orig% 
+              \iftkz@Y@nograd\else\tkz@showgrad{\ygrad}%
+                         $\textcolor{\tkz@sur@colorlabel}{\tkz@Y@gradsize{\numprint{\tkz@result}}}$\fi
+          \else
+           \iftkz@init@NO% 
+             \ifx\tkz@pos \posmin\else
+             \tkz@showgrad{\ygrad}%
+                 $\textcolor{\tkz@sur@colorlabel}{\tkz@Y@gradsize{\numprint{\tkz@result}}}$\fi
+        \else 
+          \ifx\tkz@pos \ytkzero 
+            \iftkz@Y@unit\tkz@showgrad{\ygrad}%
+               $\textcolor{\tkz@sur@colorlabel}{\tkz@Y@gradsize{\numprint{\tkz@result}}}$\fi\else
+            \iftkz@Y@nograd%
+             \else \tkz@showgrad{\ygrad}%
+              $\textcolor{\tkz@sur@colorlabel}{\tkz@Y@gradsize{\numprint{\tkz@result}}}$\fi\fi
+        \fi
+    \fi
+   };%
+  }%
+\fi
+\iftkz@init@NO\else\iftkz@Y@unit%
+  \draw[line width = 1pt,%
+        inner sep  = 1pt] (0,0) -- (0,1)%
+        node[left=3pt]%
+       {$\tkz@Y@gradsize{\numprint{\tkz@init@ystep}}$};% 
+  \draw[line width = \tkz@Y@tickwd,%
+        shift      = {(0,1)}]%
+      (\tkz@Y@tickrt,0pt)--(-\tkz@Y@ticklt,0pt);%
+  \fi\fi
+}%
+
+\endinput

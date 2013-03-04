@@ -1,0 +1,72 @@
+ \begin{tikzpicture}[x=1.5cm,y=1.5cm]
+  \GraphInit[vstyle=Hasse]
+  \renewcommand{\VertexLineWidth}{1pt}
+  %\SetGraphUnit{0.5}
+  %\draw[help lines] (0,0) grid (16,2);
+  \fill[color=background] (-0.5,-1.5) rectangle (15.5,1.5);
+  %\fill[color=accentheavy] (-4.5,-0.5) rectangle (3.5,0.5);
+  %\fill[color=accentlight] (-0.5,-0.5) rectangle (7.5,0.5);
+  %\fill[color=backgroundaccent] (-0.5,-0.5) rectangle (7.5,0.5);
+  \Vertex[x=-5,y=0,empty]{L}
+  \renewcommand{\VertexLightFillColor}{DarkGreen}
+  \Vertex[x=-4,y=0,Lpos=90]{13}
+  \Vertex[x=-3,y=0,Lpos=90]{14}
+  \renewcommand{\VertexLightFillColor}{accentheavy}
+  \Vertex[x=-2,y=0,Lpos=90]{15}
+  \Vertex[x=-1,y=0,Lpos=90]{16}
+  %\Vertices[x=-4,y=0,Lpos=90]{line}{13,14,15,16}
+  \draw (-2.5,-1) node {Cycle wrap};
+  \Edges(L,13,14,15,16) 
+  %\Vertices[Lpos=90]{line}{1,2,3,4,5,6,7,8}
+  \Vertex[x=0,y=0,Lpos=90]{1}
+  \Vertex[x=1,y=0,Lpos=90]{2}
+  \renewcommand{\VertexLightFillColor}{accentlight}
+  \Vertex[x=2,y=0,Lpos=90]{3}
+  \Vertex[x=3,y=0,Lpos=90]{4}
+  \node[draw,inner sep=6pt,fill=accentheavy,fill opacity=0.3,thick,rounded rectangle,fit=(13) (14) (15) (16) (1) (2) (3) (4)] {};
+  \Edges(16,1,2,3,4) 
+  \Vertex[x=4,y=0,Lpos=90]{5}
+  \Vertex[x=5,y=0,Lpos=90]{6}
+  \renewcommand{\VertexLightFillColor}{backgroundaccent}
+  \Vertex[x=6,y=0,Lpos=90]{7}
+  \Vertex[x=7,y=0,Lpos=90]{8}
+  \Edges(4,5,6,7,8) 
+  \node[draw,inner sep=12pt,fill=accentlight,fill opacity=0.3,thick,rounded rectangle,fit=(1) (2) (3) (4) (5) (6) (7) (8)] {};
+  \Vertex[x=8,y=0,Lpos=90]{9}
+  \Vertex[x=9,y=0,Lpos=90]{10}
+  \renewcommand{\VertexLightFillColor}{DarkGreen}
+  \Vertex[x=10,y=0,Lpos=90]{11}
+  \Vertex[x=11,y=0,Lpos=90]{12}
+  \Edges(8,9,10,11,12) 
+  \node[draw,inner sep=6pt,fill=backgroundaccent,fill opacity=0.3,thick,rounded rectangle,fit=(5) (6) (7) (8) (9) (10) (11) (12)] {};
+  \Vertex[x=12,y=0,Lpos=90]{13}
+  \Vertex[x=13,y=0,Lpos=90]{14}
+  \renewcommand{\VertexLightFillColor}{accentheavy}
+  \Vertex[x=14,y=0,Lpos=90]{15}
+  \Vertex[x=15,y=0,Lpos=90]{16}
+  \Edges(12,13,14,15,16) 
+  \node[draw,inner sep=12pt,fill=DarkGreen,fill opacity=0.3,thick,rounded rectangle,fit=(9) (10) (11) (12) (13) (14) (15) (16)] {};
+  \Vertex[x=16,y=0,Lpos=90]{1}
+  \Vertex[x=17,y=0,Lpos=90]{2}  
+  \renewcommand{\VertexLightFillColor}{accentlight}
+  \Vertex[x=18,y=0,Lpos=90]{3}
+  \Vertex[x=19,y=0,Lpos=90]{4}  
+  \node[draw,inner sep=6pt,fill=accentheavy,fill opacity=0.3,thick,rounded rectangle,fit=(13) (14) (15) (16) (1) (2) (3) (4)] {};
+  %\Edges(16,1,2,3,4,5,6,7,8)
+  %\Vertices[Lpos=90,x=8,y=0]{line}{9,10,11,12,13,14,15,16}
+  %\Edges(8,9,10,11,12,13,14,15,16)
+  %\Vertices[x=16,y=0,Lpos=90]{line}{1,2,3,4}
+  
+  \Vertex[x=20,y=0,empty]{R}
+  \Edges(16,1,2,3,4,R) 
+  %\Edges(16,1,2,3,4,R)
+  \draw (17.5,-1) node {Cycle wrap};
+  \draw (0,1) node {1};
+  \draw (7,1) node {$\ell$};
+  \draw (2,1) node[color=accentlight] {$H$};
+  \draw (3,1) node[color=accentlight] {$H$};
+  \draw (4,1) node[color=accentlight] {$H$};
+  \draw (5,1) node[color=accentlight] {$H$};
+  \draw (7.5,-1) node {The cycle graph};
+  
+ \end{tikzpicture}

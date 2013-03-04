@@ -1,0 +1,62 @@
+\documentclass{minimal}
+\usepackage{tikz}
+\usepackage{tkz-base}
+\usepackage{tkz-graph}
+\usetikzlibrary{fit,shapes}
+
+\definecolor{background}{RGB}{238,236,225}
+\definecolor{accentlight}     {RGB}{31,73,125}
+\definecolor{accentheavy}      {RGB}{153,0,0}
+\definecolor{shadelight}{RGB}{142,180,227} % light blue
+%\definecolor{shadeheavy}{RGB}{203,203,203}
+\definecolor{shadeheavy}{RGB}{196,189,151}
+\colorlet{shadelight}{shadeheavy!50!white}
+\definecolor{backgroundaccent}{RGB}{196,189,151}
+\definecolor{background}{RGB}{238,236,225}
+\definecolor{neutralshade}{gray}{0.85}  
+
+\begin{document}
+ \begin{tikzpicture}[x=0.65cm,y=0.65cm]
+  \GraphInit[vstyle=Hasse]
+  \renewcommand{\VertexLineWidth}{1pt}
+  %\SetGraphUnit{0.5}
+  %\draw[help lines] (0,0) grid (16,2);
+  \fill[color=background] (-0.5,-1.5) rectangle (15.5,1.5);
+  %\fill[color=accentheavy] (-4.5,-0.5) rectangle (3.5,0.5);
+  %\fill[color=accentlight] (-0.5,-0.5) rectangle (7.5,0.5);
+  %\fill[color=backgroundaccent] (-0.5,-0.5) rectangle (7.5,0.5);
+  \Vertex[x=-5,y=0,empty]{L}
+  \Vertex[x=-4,y=0,Lpos=90]{13}
+  \Vertex[x=-3,y=0,Lpos=90]{14}
+  \renewcommand{\VertexLightFillColor}{accentheavy}
+  \Vertex[x=-2,y=0,Lpos=90]{15}
+  \Vertex[x=-1,y=0,Lpos=90]{16}
+  %\Vertices[x=-4,y=0,Lpos=90]{line}{13,14,15,16}
+  \draw (-2.5,-1) node {Cycle wrap};
+  \Edges(L,13,14,15,16) 
+  %\Vertices[Lpos=90]{line}{1,2,3,4,5,6,7,8}
+  \Vertex[x=0,y=0,Lpos=90]{1}
+  \Vertex[x=1,y=0,Lpos=90]{2}
+  \renewcommand{\VertexLightFillColor}{accentlight}
+  \Vertex[x=2,y=0,Lpos=90]{3}
+  \Vertex[x=3,y=0,Lpos=90]{4}
+  \node[draw,fill=accentheavy,fill opacity=0.3,thick,rounded rectangle,fit=(13) (14) (15) (16) (1) (2) (3) (4)] {};
+  \Vertex[x=4,y=0,Lpos=90]{5}
+  \Vertex[x=5,y=0,Lpos=90]{6}
+  \renewcommand{\VertexLightFillColor}{darkgreen}
+  \Vertex[x=6,y=0,Lpos=90]{7}
+  \Vertex[x=7,y=0,Lpos=90]{8}
+  \node[draw,fill=accentlight,fill opacity=0.3,thick,rounded rectangle,fit=(1) (2) (3) (4) (5) (6) (7) (8)] {};
+  \Vertex[x=8,y=0,Lpos=90]{9}
+  \Vertex[x=9,y=0,Lpos=90]{10}
+  \renewcommand{\VertexLightFillColor}{backgroundaccent}
+  %\Edges(16,1,2,3,4,5,6,7,8)
+  %\Vertices[Lpos=90,x=8,y=0]{line}{9,10,11,12,13,14,15,16}
+  %\Edges(8,9,10,11,12,13,14,15,16)
+  %\Vertices[x=16,y=0,Lpos=90]{line}{1,2,3,4}
+  \Vertex[x=20,y=0,empty]{R}
+  %\Edges(16,1,2,3,4,R)
+  \draw (17.5,-1) node {Cycle wrap};
+  
+ \end{tikzpicture}
+\end{document}

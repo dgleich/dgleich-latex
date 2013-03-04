@@ -1,0 +1,125 @@
+% David Gleich's Beamer theme
+
+\mode<presentation>
+
+\setbeamertemplate{navigation symbols}{}
+
+\newlength{\pageborder}
+\setlength{\pageborder}{3cm}
+
+% Major template
+\defbeamertemplate*{headline}{infolines theme}{}
+\setbeamersize{text margin left=\pageborder,text margin right=\pageborder}
+
+% setup footer
+\newcommand{\footlinecomment}{renew footlinecomment to replace}
+\defbeamertemplate*{footline}{infolines theme}
+{ \tiny%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.25\paperwidth,%
+    sep=0.5\pageborder,dp=1ex,left]{author in head/foot}%
+    \usebeamerfont{author in head/foot}%
+      \hspace{\pageborder}\insertshortauthor%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,%
+      sep=0.5\pageborder,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\vphantom{0}{\footlinecomment}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.25\paperwidth,%
+    sep=0.5\pageborder,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace{\pageborder}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+
+\setbeamercolor*{normal text}{fg=black,bg=}
+\setbeamercolor*{alerted text}{fg=accentheavy}
+\setbeamerfont*{alerted text}{series=\mdseries}
+\setbeamercolor*{structure}{fg=accentlight}
+\setbeamercolor*{block title}{fg=accentheavy}
+\setbeamercolor*{frametitle}{fg=accentlight}
+\setbeamercolor*{title}{fg=black,bg=background}
+\setbeamercolor*{headline}{fg=black,bg=background}
+\setbeamercolor*{author in head/foot}{bg=background,fg=accentlight}
+\setbeamercolor*{title in head/foot}{bg=background,fg=accentlight}
+\setbeamercolor*{date in head/foot}{bg=background,fg=accentlight}
+\setbeamercolor*{author in headline}{fg=accentlight,bg=}
+\setbeamercolor*{title in headline}{fg=accentheavy,bg=}
+\setbeamercolor*{date in headline}{fg=shadeheavy,bg=}
+\setbeamercolor{ref in head/foot}{fg=accentlight}
+\colorlet{rowshade1}{shadeheavy}
+\colorlet{rowshade2}{shadelight}
+
+% Setup font config
+
+\setbeamerfont{title}{size=\normalsize,family*=\fancysansfamily}
+\setbeamerfont{author}{size=\normalsize,family*=\fancysansfamily,shape=\itshape}
+\setbeamerfont{institute}{family*=\fancysansfamily,size=\normalsize,shape=\itshape}
+\setbeamerfont{date}{family*=\fancysansfamily,size=\normalsize,shape=\itshape}
+\setbeamerfont{title in headline}{family*=\fancysansfamily,%
+  size=\Huge}
+\setbeamerfont{author in headline}{family*=\fancysansfamily,shape=\itshape,%
+  size=\large}
+\setbeamerfont{date in headline}{family*=\fancysansfamily,shape=\itshape,%
+  size=\large}
+\setbeamerfont{ref in head/foot}{parent=date in head/foot,size=\scriptsize}
+\setbeamerfont*{author in head/foot}{size=\footnotesize,family*=\fancysansfamily}
+\setbeamerfont*{title in head/foot}{size=\footnotesize,family*=\fancysansfamily}
+\setbeamerfont*{date in head/foot}{size=\footnotesize,family*=\fancysansfamily}
+\setbeamerfont{frametitle}{size=\huge,family*=\fancysansfamily,series=\mdseries} 
+\setbeamerfont{block title}{size=\large,family*=\fancysansfamily,series=\mdseries}
+
+% Left align titles
+\setbeamertemplate{frametitle}[default][left]
+% Center align titles
+%\setbeamertemplate{frametitle}[default][center]
+
+%\setbeamertemplate{itemize item}{\lower3pt\hbox{\Large\textbullet}}
+
+\newcommand{\fancyauthor}{renewcommand fancyauthor to replace this}
+\setbeamertemplate{headline}{
+  \setlength{\parskip}{0pt}%
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0.5\pageborder]{headline}%
+    \hspace{0.5\pageborder}\hspace{1cm}%
+     \parbox{0.65\textwidth}{%
+      \begin{beamercolorbox}[wd=\linewidth,vmode]{title in headline}%
+      {\usebeamerfont{title in headline}%
+        \textls[150]{\inserttitle}{\VeryHuge\strut\par\vskip-0.5em}}%%
+      \end{beamercolorbox}
+    }
+    \hspace{10cm}%
+    \parbox{0.2\paperwidth}{%
+      \begin{beamercolorbox}[wd=\linewidth,vmode,sep=2ex]{%
+        author in headline}%
+      % Very hacky
+      {\fancyauthor}
+      %\vskip4ex\par%
+      %{\usebeamercolor*{date in headline}%
+        %\usebeamerfont{date in headline}\insertdate}%
+      \end{beamercolorbox}%
+    }
+  \end{beamercolorbox}%    
+}
+
+% Redo the box to make it have the fancy text
+\setbeamertemplate{block begin}
+{
+  \begin{beamercolorbox}[colsep*=.75ex]{block title}
+    \usebeamerfont*{block title}\textls[100]{%
+      \MakeTextUppercase{\insertblocktitle}%
+    }%
+  \end{beamercolorbox}%
+  {\par}%
+  \ifbeamercolorempty[bg]{block title}
+  {}
+  {\ifbeamercolorempty[bg]{block body}{}{\nointerlineskip\vskip-0.5pt}}%
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[colsep*=.75ex,vmode]{block body}%
+    \ifbeamercolorempty[bg]{block body}{\vskip-.25ex}{\vskip-.75ex}\vbox{}%
+}
+
+
+\mode
+<all>

@@ -1,0 +1,158 @@
+% David Gleich's Beamer theme
+
+\mode<presentation>
+
+\newif\ifbeamer@secheader
+\beamer@secheaderfalse
+
+\DeclareOptionBeamer{secheader}{\beamer@secheadertrue}
+\ProcessOptionsBeamer
+
+% Major template
+\defbeamertemplate*{headline}{infolines theme}{}
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+% Turn off navigation
+\setbeamertemplate{navigation symbols}{}
+
+% Setup citations
+\gdef\beamer@shortcitation{}
+\gdef\insertcitation{}
+\newcommand{\clearcitation}{%
+  \gdef\beamer@shortcitation{}%
+  \gdef\insertcitation{}%
+}
+\newcommand\framecitation{\dgleich@@framecitation}
+\long\def\dgleich@@framecitation#1{%
+  \gdef\insertcitation{%
+    {%
+      #1%
+    }%
+  }%  
+  \gdef\beamer@shortcitation{#1}%
+}
+\let\dgleich@citation@endframe\frame
+\def\frame{%
+  \gdef\beamer@shortcitation{}%
+  \gdef\insertcitation{}%
+  \dgleich@citation@endframe%
+}  
+
+% setup footer
+\defbeamertemplate*{footline}{infolines theme}
+{ \tiny%
+  %\leavevmode%
+  %\ifx\insertcitation\@empty%
+  %\else%
+    %\vspace{-2.25ex}
+    \hbox{%
+    \begin{beamercolorbox}[wd=1.0\paperwidth,ht=2.25ex,dp=1ex,right]{ref in head/foot}%
+      \usebeamerfont{ref in head/foot}\insertcitation\hspace*{1.5ex}
+    \end{beamercolorbox}%
+    }%
+  %\fi%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor~~(\insertshortinstitute)
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertsectionhead
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+
+\def\setoffwhitesheetcolors{
+\setbeamercolor*{normal text}{fg=black,bg=background}
+\setbeamercolor*{alerted text}{fg=accentheavy}
+\setbeamerfont*{alerted text}{series=\mdseries}
+\setbeamercolor*{structure}{fg=accentlight}
+\setbeamercolor*{block title}{fg=accentheavy}
+\setbeamercolor*{frametitle}{fg=accentlight}
+\setbeamercolor*{author in head/foot}{bg=}
+\setbeamercolor*{title in head/foot}{bg=}
+\setbeamercolor*{date in head/foot}{bg=}
+\setbeamercolor*{section in head/foot}{fg=accentlight}
+\setbeamercolor*{subsection in head/foot}{fg=palette primary}
+\setbeamercolor{ref in head/foot}{fg=accentlight}
+\colorlet{rowshade1}{shadeheavy}
+\colorlet{rowshade2}{shadelight}
+}
+
+
+\def\setblacksheetcolors{
+\setbeamercolor*{normal text}{fg=white,bg=black}
+\setbeamercolor*{alerted text}{fg=accentlight}
+\setbeamerfont*{alerted text}{series=\bfseries}
+\setbeamercolor*{structure}{fg=white}
+\setbeamertemplate{background canvas}[default]
+}
+
+\setoffwhitesheetcolors
+
+
+
+
+% Define a custom section command
+\AtBeginSection[] % Do nothing for \section*
+{
+\begin{frame}[plain]
+\parbox[c][0.7\textheight]{0.55\textwidth}{
+  \begin{raggedright}
+  {\usebeamerfont{frametitle} \insertsectionhead \par }
+  \medskip
+    
+  { \usebeamerfont{date} \small Slide \insertframenumber{} of  \inserttotalframenumber} 
+  \end{raggedright}
+}
+\parbox[c][0.7\textheight]{0.4\textwidth}{
+\begin{raggedleft}
+ \small
+ \tableofcontents[currentsection]
+\end{raggedleft}
+}
+\end{frame}
+}
+
+% Setup font config
+
+\setbeamerfont{title}{size=\normalsize,family*=\fancysansfamily}
+\setbeamerfont{author}{size=\normalsize,family*=\fancysansfamily,shape=\itshape}
+\setbeamerfont{institute}{family*=\fancysansfamily,size=\normalsize,shape=\itshape}
+\setbeamerfont{date}{family*=\fancysansfamily,size=\normalsize,shape=\itshape}
+\setbeamerfont{author in head/foot}{family*=\fancysansfamily,shape=\itshape}
+\setbeamerfont{title in head/foot}{family*=\fancysansfamily,shape=\itshape}
+\setbeamerfont{date in head/foot}{family*=\fancysansfamily,shape=\itshape}
+\setbeamerfont{ref in head/foot}{parent=date in head/foot,size=\scriptsize}
+\setbeamerfont{frametitle}{size=\huge,family*=\fancysansfamily,series=\mdseries} 
+
+% Left align titles
+\setbeamertemplate{frametitle}[default][left]
+% Center align titles
+%\setbeamertemplate{frametitle}[default][center]
+
+%\setbeamertemplate{itemize item}{\lower3pt\hbox{\Large\textbullet}}
+
+
+%% Title page
+\setbeamertemplate{title page}{
+  \fancysans
+  \begin{raggedleft}
+  {\usebeamerfont{title}\textcolor{accentheavy}\inserttitle\par}%
+  \vskip1em\par
+  {\usebeamerfont{author}\textcolor{accentlight}\insertauthor}
+  \vskip1ex\par
+  {\usebeamerfont{institute}\textcolor{lighttextcolor}\insertinstitute}
+  \vskip2ex\par
+  {\usebeamerfont{date}\textcolor{lighttextcolor}\insertdate}
+  \end{raggedleft}
+  \vfill
+}
+
+
+\mode
+<all>
