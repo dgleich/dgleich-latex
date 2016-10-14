@@ -1,11 +1,16 @@
 %\documentclass{dgleich-article}
 %\RequirePackage[l2tabu, orthodox]{nag}
-\documentclass[longtitle,sidenotes,nofancyfonts]{dgleich-article}
+\documentclass[longtitle,sidenotes,nofonts]{dgleich-article}
 %\documentclass{article}
 %\documentclass{article}
 %\usepackage{showframe}
+\def\lstbasicfont{\fontfamily{lmtt}\selectfont}
 \usepackage{dgleich-math}
 
+\usepackage{bm}
+
+%\newcommand{\mat}{\boldsymbol}
+\newcommand{\mat}[1]{\boldsymbol{\mathrm{#1}}}
 
 
 \title{Shining a light into the digital dark age with computational approaches to digital stewardship}
@@ -21,6 +26,12 @@
 \begin{abstract}
  This lecture covers eigenvalue algorithms.
 \end{abstract}
+
+\section{Subscripts}
+$\mT_{k}^j$
+$\mA^k$
+$A^k$
+$\bm{\mathrm{A}}^{k}$
 
 \section{Review}
 Last lecture, we saw...\footnote{Blah}

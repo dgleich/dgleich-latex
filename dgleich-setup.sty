@@ -79,7 +79,7 @@
 
 
 %% Commands
-\newcommand{\email}[1]{\textsf{#1}}
+%\newcommand{\email}[1]{\textsf{#1}}
 \newcommand{\acro}[1]{\textsc{\MakeTextLowercase{#1}}}
 
 %% Columns
@@ -96,7 +96,7 @@
 \newcolumntype{W}{>{\Centering\arraybackslash}X}
 
 \@ifundefined{texorpdfstring}{%
-  \newcommand{\famp}[1][\relax]{{\protect\mbox{\fontshape\itdefault#1\textit{\&}}}{and}}%
+  \newcommand{\famp}[1][\relax]{{\protect\mbox{\fontshape\itdefault#1\textit{\&}}}}%
 }{%
   \newcommand{\famp}[1][\relax]{{\texorpdfstring{\protect\mbox{\fontshape\itdefault#1\textit{\&}}}{and}}}%
 }
@@ -117,7 +117,7 @@
 
 % figure paths
 \graphicspath{{.}{./figures/}}
-
+\providecommand{\lstbasicfont}{\fontfamily{lmtt}\selectfont}
 \lstset{%
   basicstyle={\lstbasicfont\footnotesize},    % use font and smaller size
   showstringspaces=false,                     % do not emphasize spaces in strings
@@ -138,8 +138,8 @@
     {~=}{{\tiny$\neq$}}1 %      \neq
     {delta}{{\tiny$\Delta$}}1%  \Delta
 }
-\lstnewenvironment{pseudocode}{%
-  \lstset{language=python,%             % use our version of highlighting
+\lstnewenvironment{pseudocode}[1][]{%
+  \lstset{language=python,#1%             % use our version of highlighting
   }%
 }{}
 

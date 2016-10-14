@@ -44,6 +44,8 @@
 %\RequirePackage{amssymb}
 \RequirePackage{onlyamsmath}
 
+\RequirePackage{bm}
+
 % check for mathbb
 \expandafter\ifx\csname mathbb\endcsname\relax%
   \RequirePackage{amssymb}
@@ -168,10 +170,13 @@
 \DeclarePairedDelimiter{\ParensOf}{(}{)}
 \DeclarePairedDelimiter{\AngleOf}{\langle}{\rangle}
 
-\providecommand{\mat}[1]{\boldsymbol{\mathrm{#1}}}%
+\providecommand{\mat}[1]{\boldsymbol{{#1}}}%
 \renewcommand{\vec}[1]{\boldsymbol{\mathrm{#1}}}
-\DeclareMathOperator{\rank}{rank}%
-\DeclareMathOperator{\diag}{diag}%
+
+%\providecommand{\mat}[1]{\boldsymbol{\mathrm{#1}}}%
+%\renewcommand{\vec}[1]{\boldsymbol{\mathrm{#1}}}
+%\DeclareMathOperator{\rank}{rank}%
+%\DeclareMathOperator{\diag}{diag}%
 \DeclareMathOperator{\Diag}{Diag}%
 \providecommand{\itr}[2]{#1^{(#2)}}
 \providecommand{\itn}[1]{^{(#1)}}%
@@ -220,7 +225,7 @@
 
 \DeclareMathOperator{\degree}{degree}
 \DeclareMathOperator{\trace}{trace}
-\DeclareMathOperator{\supp}{supp}
+%\DeclareMathOperator{\supp}{supp}
 \providecommand{\set}{\mathcal}
 \providecommand{\graph}{\mathcal}
 \providecommand{\mathdef}{\equiv}
@@ -280,7 +285,7 @@
 \providecommand{\vj}{\ensuremath{\vec{j}}}
 \providecommand{\vk}{\ensuremath{\vec{k}}}
 \providecommand{\vl}{\ensuremath{\vec{l}}}
-\providecommand{\vm}{\ensuremath{\vec{l}}}
+\providecommand{\vm}{\ensuremath{\vec{m}}}
 \providecommand{\vn}{\ensuremath{\vec{n}}}
 \providecommand{\vo}{\ensuremath{\vec{o}}}
 \providecommand{\vp}{\ensuremath{\vec{p}}}

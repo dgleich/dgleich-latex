@@ -128,6 +128,7 @@
 }{
   % Setup latin modern property
   \RequirePackage[lighttt]{lmodern}
+  \def\lstbasicfont{\fontfamily{lmtt}\selectfont}
   \usepackage{amssymb}
 }
 }
@@ -212,6 +213,13 @@
   [block]% shape
   {\bfseries} % format applied to label+text
   {\scshape\MakeTextLowercase{\thesection}}% label
+  {1em}% horizontal separation between label and title body
+  {\sectionformat}% before the title body
+  []% after the title body
+\titleformat{name=\section,numberless}% the `%` must be RIGHT against the }
+  [block]% shape
+  {\bfseries} % format applied to label+text
+  {\scshape}% label
   {1em}% horizontal separation between label and title body
   {\sectionformat}% before the title body
   []% after the title body
