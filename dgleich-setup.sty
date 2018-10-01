@@ -143,6 +143,19 @@
   }%
 }{}
 
+\lstdefinelanguage{Julia}%
+  {morekeywords={abstract,break,case,catch,const,continue,do,else,elseif,%
+      end,export,false,for,function,immutable,import,importall,if,in,%
+      macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
+      using,while},%
+   sensitive=true,%
+   alsoother={$},%
+   morecomment=[l]\#,%
+   morecomment=[n]{\#=}{=\#},%
+   morestring=[s]{"}{"},%
+   morestring=[m]{'}{'},%
+}[keywords,comments,strings]%
+
 \lstdefinelanguage{matlabfloz}{%
   alsoletter={...},%
   morekeywords={%                             % keywords
@@ -179,6 +192,27 @@
     \lstset{language=matlabfloz,%
       numbers=left,frame=none,%
       keywordstyle=\color{subtleblue},%,          % keywords
+      commentstyle=\color{subtlegreen},%         % comments
+      stringstyle=\color{subtlered}%             % strings
+    }%
+  }%
+  {}
+
+
+\lstnewenvironment{dispjulia}{%
+    \lstset{language=Julia,%
+      numbers=none,frame=none,%
+      keywordstyle=\color{subtleblue},%,          % keywords
+      commentstyle=\color{thegreen},%         % comments
+      stringstyle=\color{subtleed}%             % strings
+    }%
+  }%
+  {}
+
+\lstnewenvironment{numberedjulia}{%
+    \lstset{language=Julia,%
+      numbers=left,frame=none,%
+      keywordstyle=\bfseries\color{subtleblue},%,          % keywords
       commentstyle=\color{subtlegreen},%         % comments
       stringstyle=\color{subtlered}%             % strings
     }%
