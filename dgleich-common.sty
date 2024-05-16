@@ -118,7 +118,12 @@
 {}%if no fonts, then ignore fonts
 {
 \RequirePackage[T1]{fontenc}
-\RequirePackage[latin1]{inputenc}
+% some useful notes... 
+% https://tex.stackexchange.com/questions/24528/having-problems-with-listings-and-utf-8-can-it-be-fixed
+% \RequirePackage[latin1]{inputenc} % commented on 2019-10-14 to try and use utf8
+\RequirePackage[utf8]{inputenc}  % this did not work and so I reverted
+% Trying to swtich to UTF8 again 2022-09-27
+% to get listing to work for CS515...
 \ifthenelse{\boolean{@dgleich@fancyfonts}}{%
   \RequirePackage[minionint,openg,mathlf,mathtabular]{MinionPro}%
   \RequirePackage[scaled=0.8]{helvet}%

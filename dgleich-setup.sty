@@ -131,12 +131,17 @@
   %
   % the following is for replacing some matlab relations like >= or ~=
   % by the corresponding LaTeX symbols, which are much easier to read ...
+  %literate=%
+  %  {~}{{$\neg$}}1 %            \neg
+  %  {<=}{{\tiny$\leq$}}1 %      \leq
+  %  {>=}{{\tiny$\geq$}}1 %      \geq
+  %  {~=}{{\tiny$\neq$}}1 %      \neq
+  %  {delta}{{\tiny$\Delta$}}1%  \Delta
+  inputencoding=utf8,
+  extendedchars=true,
   literate=%
-    {~}{{$\neg$}}1 %            \neg
-    {<=}{{\tiny$\leq$}}1 %      \leq
-    {>=}{{\tiny$\geq$}}1 %      \geq
-    {~=}{{\tiny$\neq$}}1 %      \neq
-    {delta}{{\tiny$\Delta$}}1%  \Delta
+    {α}{{\alpha}}1% 
+    {γ}{{\gamma}}1 
 }
 \lstnewenvironment{pseudocode}[1][]{%
   \lstset{language=python,#1%             % use our version of highlighting
@@ -218,3 +223,23 @@
     }%
   }%
   {}
+  
+\lstnewenvironment{jlcode}{%
+    \lstset{language=Julia,%
+      numbers=left,frame=none,%
+      keywordstyle=\bfseries\color{subtleblue},%,          % keywords
+      commentstyle=\color{subtlegreen},%         % comments
+      stringstyle=\color{subtlered}%             % strings
+    }%
+  }%
+  {}
+  
+\lstnewenvironment{jlcode*}{%
+    \lstset{language=Julia,%
+      numbers=none,frame=none,%
+      keywordstyle=\bfseries\color{subtleblue},%,          % keywords
+      commentstyle=\color{subtlegreen},%         % comments
+      stringstyle=\color{subtlered}%             % strings
+    }%
+  }%
+  {} 
